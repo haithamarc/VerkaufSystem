@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Display customer details</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<h:body>
+    <div class="o-page-wrapper">
+        <f:metadata>
+            <f:viewParam name="customerId" value="#{customerDetailsView.customerId}"/>
+            <f:viewAction action="#{customerDetailsView.init()}"/>
+        </f:metadata>
+        <div class="o_button-wrapper">
+            <div class="o-nav_button-wrapper">
+                <h:button value="Return to customers list " outcome="/protected/master_pages/customers.xhtml"
+                          styleClass="c-button u-spacing-out-right--xsmall"/>
+                <h:button value="Return to dashboard " outcome="/protected/dashboard.xhtml" styleClass="c-button"/>
+            </div>
+            <h:form>
+                <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button"/>
+            </h:form>
+        </div>
+        <h1>Customer details</h1>
+        <h:form prependId="false"
+                rendered="#{not customerDetailsView.showEditForm and customerDetailsView.showDeleteMessage eq false}">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Customer Id: "/>
+                <h:outputText value="#{customerDetailsView.customer.customerId}"/>
+
+                <h:outputLabel value="First name: "/>
+                <h:outputText value="#{customerDetailsView.customer.firstName}"/>
+
+                <h:outputLabel value="Last name: "/>
+                <h:outputText value="#{customerDetailsView.customer.lastName}"/>
+
+                <h:outputLabel value="E-mail: "/>
+                <h:outputText value="#{customerDetailsView.customer.email}"/>
+
+                <h:outputLabel value="Phone number: "/>
+                <h:outputText value="#{customerDetailsView.customer.phone}"/>
+
+                <h:outputLabel value="Street: "/>
+                <h:outputText value="#{customerDetailsView.customer.street}"/>
+
+                <h:outputLabel value="Zip code: "/>
+                <h:outputText value="#{customerDetailsView.customer.zipCode}"/>
+
+                <h:outputLabel value="City: "/>
+                <h:outputText value="#{customerDetailsView.customer.city}"/>
+
+                <h:outputLabel value="State: "/>
+                <h:outputText value="#{customerDetailsView.customer.state}"/>
+            </h:panelGrid>
+            <br/>
+            <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                <h:commandButton value="Edit"
+                                 action="#{customerDetailsView.activeShowEditForm()}"
+                                 disabled="#{customerDetailsView.showDialog}"
+                                 styleClass="c-button u-spacing-out-right--xsmall"/>
+                <h:commandButton value="Delete"
+                                 action="#{customerDetailsView.activeShowDialog()}"
+                                 disabled="#{customerDetailsView.canBeDeleted() or customerDetailsView.showDialog}"
+                                 styleClass="c-button"/>
+            </div>
+            <br/>
+            <h:panelGroup>
+                <h:form rendered="#{customerDetailsView.showDialog}">
+                    <h:outputLabel value="Are you sure you want to delete this customer?" styleClass="error-message"/>
+                    <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                        <h:commandButton value="Yes"
+                                         action="#{customerDetailsView.deleteCustomerWithNoOrders()}"
+                                         styleClass="c-button u-spacing-out-right--xsmall"/>
+                        <h:commandButton value="No"
+                                         action="#{customerDetailsView.hideDialog()}"
+                                         styleClass="c-button"/>
+                    </div>
+                </h:form>
+            </h:panelGroup>
+        </h:form>
+
+
+        <h:form rendered="#{customerDetailsView.showDeleteMessage}">
+            <h:panelGroup>
+                <h:outputText value="#{customerDetailsView.deleteStatus}" styleClass="success-message"/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:button value="Ok" outcome="/protected/master_pages/customers.xhtml"
+                              styleClass="c-button u-spacing-out-right--xsmall"/>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+        <h:form rendered="#{customerDetailsView.showEditForm}">
+            <h:panelGroup rendered="#{not customerDetailsView.showUpdateMessage}">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Customer Id: "/>
+                    <h:outputText value="#{customerDetailsView.customer.customerId}"/>
+                    <h:outputText value=""/>
+
+                    <h:outputLabel value="First name : "/>
+                    <h:inputText id="first_name" value="#{customerDetailsView.tempCustomer.firstName}"
+                                 disabled="#{customerDetailsView.showDialog}"/>
+                    <h:message for="first_name" styleClass="error-message"/>
+
+                    <h:outputLabel value="Last name: "/>
+                    <h:inputText id="last_name" value="#{customerDetailsView.tempCustomer.lastName}"
+                                 disabled="#{customerDetailsView.showDialog}"/>
+                    <h:message for="last_name" styleClass="error-message"/>
+
+                    <h:outputLabel value="E-mail: "/>
+                    <h:inputText id="email" value="#{customerDetailsView.tempCustomer.email}"
+                                 disabled="#{customerDetailsView.showDialog}"/>
+                    <h:message for="email" styleClass="error-message"/>
+
+                    <h:outputLabel value="Phone number: "/>
+                    <h:inputText id="phone" value="#{customerDetailsView.tempCustomer.phone}"
+                                 disabled="#{customerDetailsView.showDialog}" maxlength="10"
+                                 required="false" validatorMessage="Must consist of 10 digits and omit the leading 0!">
+                        <f:validateRegex pattern="(?!0)\d{10}$|^$"/>
+                    </h:inputText>
+                    <h:message for="phone" styleClass="error-message"/>
+
+                    <h:outputLabel value="Street: "/>
+                    <h:inputText id="street" value="#{customerDetailsView.tempCustomer.street}"
+                                 disabled="#{customerDetailsView.showDialog}"/>
+                    <h:message for="street" styleClass="error-message"/>
+
+                    <h:outputLabel value="Zip code: "/>
+                    <h:inputText id="zip_code" value="#{customerDetailsView.tempCustomer.zipCode}"
+                                 disabled="#{customerDetailsView.showDialog}"/>
+                    <h:message for="zip_code" styleClass="error-message"/>
+
+                    <h:outputLabel value="City: "/>
+                    <h:inputText id="city" value="#{customerDetailsView.tempCustomer.city}"
+                                 disabled="#{customerDetailsView.showDialog}"/>
+                    <h:message for="city" styleClass="error-message"/>
+
+                    <h:outputLabel value="State: "/>
+                    <h:inputText id="state" value="#{customerDetailsView.tempCustomer.state}"
+                                 disabled="#{customerDetailsView.showDialog}"/>
+                    <h:message for="state" styleClass="error-message"/>
+
+                </h:panelGrid>
+                <br/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:commandButton value="Update" action="#{customerDetailsView.activeShowDialog()}"
+                                     disabled="#{customerDetailsView.showDialog}"
+                                     styleClass="c-button u-spacing-out-right--xsmall"/>
+                    <h:commandButton value="Exit" action="#{customerDetailsView.hideEditForm()}"
+                                     disabled="#{customerDetailsView.showDialog}"
+                                     styleClass="c-button"
+                                     immediate="true"/>
+                </div>
+            </h:panelGroup>
+            <br/>
+            <h:form rendered="#{customerDetailsView.showDialog}">
+                <h:outputLabel value="Are you sure you want to update this customer?"/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:commandButton id="yes" value="Yes" action="#{customerDetailsView.updateCustomer()}"
+                                     styleClass="c-button u-spacing-out-right--xsmall"/>
+                    <h:commandButton value="No" action="#{customerDetailsView.hideDialog()}" styleClass="c-button"
+                                     immediate="true"/>
+                </div>
+            </h:form>
+            <h:form rendered="#{customerDetailsView.showUpdateMessage}">
+                <h:outputText value="#{customerDetailsView.updateStatus}" styleClass="success-message"/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:commandButton value="Ok" action="#{customerDetailsView.hideUpdateMessage()}"
+                                     styleClass="c-button" immediate="true"/>
+                </div>
+            </h:form>
+        </h:form>
+    </div>
+</h:body>
+</html>

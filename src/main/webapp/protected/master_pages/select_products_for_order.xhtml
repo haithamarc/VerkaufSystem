@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="EN">
+<h:head>
+    <title>Display products</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<body>
+    <ui:composition>
+        <div id="dynamic_content">
+            <div class="dynamic_content_header">
+                    <h1 id="porduct_list">Choose a product : </h1>
+            </div>
+                <div class="row">
+                    <div class="c-filter">
+                        <div>
+                            <h2>The available Products in store : #{createOrderView.store.storeName}</h2>
+                            <h:outputText value="Address: #{createOrderView.store.zipCode} #{createOrderView.store.state} #{createOrderView.store.city} #{createOrderView.store.street}"/><br/>
+                            <h:outputText value="E-Mail: #{createOrderView.store.email}"/><br/>
+                            <h:outputText value="Telephon Number: #{createOrderView.store.phone}"/><br/>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <h:form  id="page" styleClass="c-filter">
+                            <div>
+                                        <h:panelGroup class="c-pagination__wrapper c-section" rendered="#{not (createOrderView.totalPageNumber eq 1)}">
+                                            <h:commandButton styleClass="paginationButton u-spacing-out-right--xsmall" class="c-button" rendered="#{not (createOrderView.totalPageNumber le 11)}" disabled="#{createOrderView.currentPage eq 1}" value="Start" action="#{createOrderView.refreshElementPage}" actionListener="#{createOrderView.firstPage()}"/>
+                                            <h:commandButton styleClass="paginationButton" class="c-button"  disabled="#{createOrderView.currentPage eq 1}" value="Prev" action="#{createOrderView.refreshElementPage}" actionListener="#{createOrderView.prevPage()}"/>
+
+                                            <ui:repeat id="pagination" value="#{createOrderView.pageNumbers}" var="page">
+                                                <h:commandLink value="#{page}" class="c-pagination__link" action="#{createOrderView.refreshElementsPage}" actionListener="#{createOrderView.setCurrentPage(page)}" rendered="#{createOrderView.currentPage != page}"/>
+                                                <h:outputText class="c-pagination__current-page" value="#{page}" escape="false" rendered="#{page == createOrderView.currentPage}"/>
+                                            </ui:repeat>
+
+                                            <h:commandButton styleClass="paginationButton u-spacing-out-right--xsmall" disabled="#{createOrderView.currentPage eq createOrderView.getTotalPageNumber()}" value="Next" action="#{createOrderView.refreshElementPage}" actionListener="#{createOrderView.nextPage()}"/>
+                                            <h:commandButton styleClass="paginationButton" rendered="#{not (createOrderView.totalPageNumber le 11)}" disabled="#{createOrderView.currentPage eq createOrderView.getTotalPageNumber()}" value="End" action="#{createOrderView.refreshElementPage}" actionListener="#{createOrderView.lastPage()}"/>
+                                        </h:panelGroup>
+
+                                    <div class="c-section u-spacing-out-top-bottom--small u-flex-row">
+                                        <label class="">Product per page: </label>
+                                        <div class="u-spacing-out-left--xsmall">
+                                            <h:selectOneMenu id="limit" class="c-select" value="#{createOrderView.itemsPerPage}">
+                                                <f:ajax render="productTable page " listener="#{createOrderView.resetElementsPage}"/>
+                                                <f:selectItem itemLabel="5" itemValue="#{5}"/>
+                                                <f:selectItem itemLabel="10" itemValue="#{10}"/>
+                                                <f:selectItem itemLabel="25" itemValue="#{25}"/>
+                                                <f:selectItem itemLabel="50" itemValue="#{50}"/>
+                                            </h:selectOneMenu>
+                                        </div>
+                                    </div>
+                                <h3>Filters:</h3>
+                                        <h:panelGrid columns="2">
+                                                <h:outputLabel value="Brand :"/>
+
+                                                    <h:selectOneMenu id="brands" class="form-control" value="#{createOrderView.filterBrandId}">
+                                                        <f:ajax render="productTable page shoppingVenture" listener="#{createOrderView.refreshElementPage}"/>
+                                                        <f:selectItem itemLabel="not selected" value="#{null}"/>
+                                                        <f:selectItems value="#{createOrderView.brands.values()}" var="brand" itemLabel="#{brand.brandName}" itemValue="#{brand.brandId}"/>
+                                                    </h:selectOneMenu>
+                                                <h:outputLabel value="Category :"/>
+
+                                                    <h:selectOneMenu id="catagories" class="form-control" value="#{createOrderView.filterCategoryId}">
+                                                        <f:ajax render="productTable page shoppingVenture" listener="#{createOrderView.refreshElementPage}"/>
+                                                        <f:selectItem itemLabel="not selected" value="#{null}"/>
+                                                        <f:selectItems value="#{createOrderView.categories.values()}" var="categorys" itemLabel="#{categorys.categoryName}" itemValue="#{categorys.categoryId}"/>
+                                                    </h:selectOneMenu>
+                                            <h:outputLabel value="Model Year :"/>
+                                                <h:selectOneMenu id="modelYears" class="form-control" value="#{createOrderView.filterModelYear}">
+                                                    <f:ajax render="productTable page shoppingVenture" listener="#{createOrderView.refreshElementPage}"/>
+                                                    <f:selectItem itemLabel="not selected" value="#{null}"/>
+                                                    <f:selectItems value="#{createOrderView.modelYears}" var="modelYear" itemLabel="#{modelYear}" itemValue="#{modelYear}"/>
+                                                </h:selectOneMenu>
+                                            <h:outputLabel value="Product name:"/>
+                                                <h:inputText styleClass="form-control" id="productname" value="#{createOrderView.filterName}">
+                                                    <f:ajax render="productTable page shoppingVenture" event="keyup" listener="#{createOrderView.refreshElementPage}"/>
+                                                </h:inputText>
+                                        </h:panelGrid>
+                            </div>
+                        </h:form>
+                        <h:panelGroup id="productTable" class="table-responsive">
+                            <h:form  id="select_product_form">
+                                <h:dataTable id="dataTable" value="#{createOrderView.filteredOrderItems}" var="orderItem" class="products_container" styleClass="c-table">
+                                    <h:column>
+                                        <f:facet class="table_header" name="header">Name</f:facet>
+                                        <h:outputText value="#{orderItem.product.productName}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet class="table_header" name="header">Brand</f:facet>
+                                        <h:outputText value="#{orderItem.product.brand.brandName}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet class="table_header" name="header">Category</f:facet>
+                                        <h:outputText value="#{orderItem.product.category.categoryName}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet class="table_header" name="header">Price</f:facet>
+                                        <h:outputText value="#{orderItem.product.listPrice} €"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet class="table_header" name="header"/>
+                                        <h:commandButton id="choose_product" styleClass="c-button" value="Choose " actionListener="#{createOrderView.selectOrderItem(orderItem)}"/>
+                                    </h:column>
+                                </h:dataTable>
+                            </h:form>
+                            <h:form styleClass="u-spacing-out-bottom-medium">
+                                <h:commandButton styleClass="c-button u-spacing-out-right--xsmall" value="Change customer" action="#{createOrderView.back()}" />
+                                <h:commandButton styleClass="c-button" value="to Shopping cart" action="#{createOrderView.toShoppingCart}" />
+                            </h:form>
+                        </h:panelGroup>
+                    </div>
+                </div>
+        </div>
+    </ui:composition>
+    </body>
+
+</html>

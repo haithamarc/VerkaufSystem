@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html   xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<f:view>
+   <h:head>
+      <meta charset="utf-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>SEP Sale-System</title>
+      <h:outputStylesheet name="css/__base.css"/>
+      <h:outputStylesheet name="css/__component.css"/>
+      <h:outputStylesheet name="css/__objects.css"/>
+      <h:outputStylesheet name="css/__utils.css"/>
+      <h:outputStylesheet name="css/__responsive.css"/>
+   </h:head>
+   <h:body>
+      <h:panelGroup id="page" class="o-layout--main-page">
+         <ui:insert name="header">
+            <ui:include src="header.xhtml"/>
+         </ui:insert>
+         <ui:insert name="side">
+            <ui:include src="sidemenu.xhtml"/>
+         </ui:insert>
+         <ui:insert name="main">
+            <ui:include src="#{jsfPagesService.page}"/>
+         </ui:insert>
+      </h:panelGroup>
+   </h:body>
+</f:view>
+</html>

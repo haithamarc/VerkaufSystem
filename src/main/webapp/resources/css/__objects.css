@@ -1,0 +1,117 @@
+/* O-LAYOUT */
+
+.o-layout--main-page {
+    display: grid;
+    grid-template-areas: 
+    'c-header c-header'
+    'c-side-bar c-main'
+    'c-side-bar c-main';
+    grid-template-columns: 15vw 85vw;
+    grid-template-rows: 7vmin repeat(2,46.5vh);
+}
+
+.o-layout--input-element { 
+    display: grid;
+    grid-template-areas:
+    'c-element__label'
+    'c-element__input'
+    'c-element__button';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 7.2rem 2.5rem;
+}
+
+.o-layout--pagination {
+    display: grid;
+    grid-template-areas:
+    'c-pagination__buttons-left c-pagination__content c-pagination__buttons-right';
+    grid-template-columns: 0.7fr 2fr 0.8fr;
+    grid-template-rows: 7.2rem;
+    column-gap: 1.5%;
+}
+
+.o-layout--features-container {
+    display: grid;
+    grid-template-areas: 
+    'c-element-search-input cell2 c-element-dropdown'
+    'c-element-search-input c-pagination c-element-dropdown'
+    'c-element-search-input cell3  c-element-dropdown';
+    grid-template-columns: 0.7fr 2fr 0.8fr;
+    grid-template-rows: auto 7.2rem 2.5rem;
+    column-gap: 1.5%;
+}
+
+/* O-FLEX */
+
+.o-flex {
+    display: flex;
+}
+
+.o-flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.o-inline-flex {
+    display: inline-flex;
+}
+
+.o-flex--justify-content-center {
+    justify-content: center;
+}
+
+.o-flex--justify-content-end {
+    justify-content: flex-end;
+}
+
+.o-flex-justify-content-center {
+    justify-content: center;
+}
+
+.o-flex--justify-content-between {
+    justify-content: space-between;
+}
+
+.o-flex--justify-content-around {
+    justify-content: space-around;
+}
+
+.o-flex--align-item-center {
+    align-items: center;
+}
+
+.o-flex--align-item-end {
+    align-items: flex-end;
+}
+
+.o-flex--centered {
+    justify-content: center;
+    align-items: center;
+}
+
+.o-flex--align-self-center {
+    align-self: center;
+}
+
+.o-flex--align-self-end {
+    align-self: end;
+}
+
+/* O-BLOCK */
+
+.o-block {
+    display: block;
+}
+
+.o-inline-block {
+    display: inline-block;
+}
+
+/* O-POSITION  */
+
+.o-position--relative {
+    position: relative
+}
+
+.o-position--absolute {
+    position: absolute;
+}

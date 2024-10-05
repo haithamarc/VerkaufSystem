@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <h:head>
+        <!--<meta charset="utf-8" />-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>SEP Sale-System</title>
+    </h:head>
+    <body>
+    <ui:composition>
+        <div class="c-main o-position--relative">
+            <h:form>
+                <div id="c-main__header-id" class="c-main__header c-main__header--color-gray-lite o-flex">
+                    <div class="c-inline-menu o-flex o-flex--align-item-center u-spacing-out-left--xlarge">
+                        <div class="c-inline-menu__item o-flex u-spacing-out-right--xxsmall o-flex">
+                            <h:commandLink class="c-inline-menu__link o-flex--align-self-center"
+                                           action="#{jsfPagesService.changePage('/secure/master_pages/customer.xhtml')}">
+                                <f:ajax render="page" />
+                                <span>Customers</span>
+                            </h:commandLink>
+                        </div>
+                        <div class="c-inline-menu__icon c-icon o-flex u-spacing-out-right--xxsmall">
+                            <img src="resources/images/icons/arrow_right_icon.png" alt="Arrow right icon" class="c-icon__xxsmall-img c-icon__img--color-gray o-flex--align-self-center" />
+                        </div>
+                        <div class="c-inline-menu__item c-inline-menu__item--active o-flex">
+                            <h:commandLink class="c-inline-menu__link o-flex--align-self-center"
+                                           action="#{jsfPagesService.changePage('/secure/master_detail_pages/customerDetails.xhtml')}">
+                                <f:param name="customerId" value="#{customerDetailsView.customer.customerId}" />
+                                <f:ajax render="page" listener="#{customerDetailsView.init(customerDetailsView.customer.customerId)}" />
+                                <f:ajax render="page"  listener="#{customerOrdersView.init(customerDetailsView.customer.customerId)}"/>
+                                <span>Customer (#{customerDetailsView.customer.lastName} #{customerDetailsView.customer.firstName}) details</span>
+                            </h:commandLink>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+            <div class="c-main__content">
+                <!-- C-CARD -->
+                <div class="c-card u-spacing-out--xlarge">
+                    <div class="c-card__header c-card__header--color-gray o-flex o-flex--justify-content-between">
+                        <div class="c-card__title c-card__title--bold o-flex o-flex--align-item-center u-spacing-out-left--medium">
+                            <div class="c-icon o-flex u-spacing-out-right--xxsmall">
+                                <img src="resources/images/icons/customer_icon.png" alt="Customer icon" class="c-icon__large-img" />
+                            </div>
+                            <span>Customer details</span>
+                        </div>
+                    </div>
+                    <div class="c-card__content u-spacing-out-left-right--medium">
+                        <div class="c-customer o-flex-col o-flex--centered u-spacing-out-top-bottom--large">
+                            <div class="icon">
+                                <img src="resources/images/icons/user_avatar_icon.jpeg" alt="Customer" class="c-icon__xlarge-img c-icon__rounded-img c-icon__box-shadow-img" />
+                            </div>
+                            <div class="c-customer__infos c-customer__infos--color-gray o-flex-col o-flex--align-item-center u-spacing-out-top--medium">
+                                <span>#{customerDetailsView.customer.lastName} #{customerDetailsView.customer.firstName}</span>
+                                <span>#{customerDetailsView.customer.zipCode} #{customerDetailsView.customer.city}, #{customerDetailsView.customer.street} #{customerDetailsView.customer.state}</span>
+                                <span>#{customerDetailsView.customer.email}</span>
+                                <div class="u-display-flex u-spacing-out-top--medium">
+                                    <h:commandLink id="edit-button" styleClass="c-icon o-flex o-flex--align-self-center o-position--relative u-spacing-out-right--xxsmall"
+                                                   action="#{jsfPagesService.changePage('/secure/master_detail_pages/customerDetails.xhtml')}">
+                                        <f:ajax render="page"/>
+                                        <img src="resources/images/icons/edit_icon2.png" alt="Edit icon" class="c-icon__small-img c-icon__img--cursor-pointer" />
+                                        <f:param name="customerId" value="#{customer.customerId}" />
+                                    </h:commandLink>
+                                    <h:commandLink styleClass="c-icon o-flex o-flex--align-self-center o-position--relative u-spacing-out-right--xxsmall"
+                                                   action="#{jsfPagesService.changePage('/secure/master_detail_pages/customerOrderDetails.xhtml')}">
+                                        <f:ajax render="page"/>
+                                        <img src="resources/images/icons/delete_icon.png" alt="Delete icon" class="c-icon__small-img c-icon__img--color-red c-icon__img--cursor-pointer" />
+                                        <f:param name="customerId" value="#{customer.customerId}" />
+                                    </h:commandLink>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- C-TABLE -->
+                        <h:form>
+                            <div class="c-table">
+                                <h:dataTable id="customersTable" value="#{customerOrdersView.ordersList}"
+                                             styleClass="c-table__table c-table__table--color-black-lite u-spacing-out-bottom--large u-spacing-out-top--medium"
+                                             var="order">
+                                    <h:column>
+                                        <f:facet name="header">Order serial number</f:facet>
+                                        <h:outputText value="#{order.orderId}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Order serial number</f:facet>
+                                        <h:outputText value="#{order.orderId}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Order date</f:facet>
+                                        <h:outputText value="#{order.orderDate}" converter="localDateConverter" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Required date</f:facet>
+                                        <h:outputText value="#{order.requiredDate}" converter="localDateConverter" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Shipped date</f:facet>
+                                        <h:outputText value="#{order.shippedDate}" converter="localDateConverter" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Order  Status</f:facet>
+                                        <h:outputText value="#{order.orderStatus.getName()}" />
+                                    </h:column>
+                                    <h:column>
+                                        <h:commandLink styleClass="c-button c-large-button c-button--bg-gray o-flex--align-self-center o-inline-flex o-flex--centered"
+                                                       action="#{jsfPagesService.changePage('/secure/master_detail_pages/customerOrderDetails.xhtml')}">
+                                            <f:ajax render="page" listener="#{orderDetailsView.init(order.orderId)}" />
+                                            <f:ajax render="page" listener="#{customerOrdersView.init(customerDetailsView.customerId)}" />
+                                            <div class="c-icon o-flex o-flex--align-self-center o-position--relative u-spacing-out-right--xxsmall">
+                                                <img src="resources/images/icons/open_icon.png" alt="Open icon" class="c-icon__xsmall-img" />
+                                            </div>
+                                            <h:outputText value="Order details" />
+                                            <f:param name="customerId" value="#{order.orderId}" />
+                                        </h:commandLink>
+                                    </h:column>
+                                </h:dataTable>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+                <!-- C-EXTERN-BRAND -->
+                <div class="c-extern-brand c-extern-brand--color-gray-lite o-flex-col u-xsmall-text u-spacing-out-right--xlarge u-display--flex-xl-lg">
+                    <span class="o-flex--align-self-end">Powered by Team-05.</span>
+                </div>
+            </div>
+        </div>
+    </ui:composition>
+    </body>
+</f:view>
+</html>

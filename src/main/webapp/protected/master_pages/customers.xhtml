@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="EN">
+<h:head>
+    <h:outputStylesheet library="css" name="style.css"/>
+    <title>Display customers</title>
+</h:head>
+<h:body>
+        <h:form styleClass="c-pop-up__wrapper" prependId="false" rendered="#{createCustomerView.showCreateForm}">
+            <div class="c-pop-up">
+                <h:panelGroup rendered="#{not createCustomerView.showCreateMessage}">
+                    <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                        <h3>New customer registration form</h3>
+                    </div>
+                    <h:panelGrid columns="3">
+                        <h:outputLabel value="First name: "/>
+                        <h:inputText id="first_name" value="#{createCustomerView.customer.firstName}"
+                                     disabled="#{createCustomerView.showDialog}"/>
+                        <h:message for="first_name" styleClass="error-message"/>
+
+                        <h:outputLabel value="Last name: "/>
+                        <h:inputText id="last_name" value="#{createCustomerView.customer.lastName}"
+                                     disabled="#{createCustomerView.showDialog}"/>
+                        <h:message for="last_name" styleClass="error-message"/>
+
+                        <h:outputLabel value="E-mail: "/>
+                        <h:inputText id="email" disabled="#{createCustomerView.showDialog}"
+                                     value="#{createCustomerView.customer.email}"/>
+                        <h:message for="email" styleClass="error-message"/>
+
+                        <h:outputLabel value="Phone number: "/>
+                        <h:inputText id="phone" disabled="#{createCustomerView.showDialog}"
+                                     value="#{createCustomerView.phoneNumber}" maxlength="10"
+                                     required="false" validatorMessage="Must consist of 10 digits and omit the leading 0!">
+                            <f:validateRegex pattern="(?!0)\d{10}$|^$"/>
+                        </h:inputText>
+                        <h:message for="phone" styleClass="error-message"/>
+
+                        <h:outputLabel value="Street: "/>
+                        <h:inputText id="street" value="#{createCustomerView.customer.street}"
+                                     disabled="#{createCustomerView.showDialog}"/>
+                        <h:message for="street" styleClass="error-message"/>
+
+                        <h:outputLabel value="Zip code: "/>
+                        <h:inputText id="zip_code" value="#{createCustomerView.customer.zipCode}"
+                                     disabled="#{createCustomerView.showDialog}"/>
+                        <h:message for="zip_code" styleClass="error-message"/>
+
+                        <h:outputLabel value="City: "/>
+                        <h:inputText id="city" value="#{createCustomerView.customer.city}"
+                                     disabled="#{createCustomerView.showDialog}"/>
+                        <h:message for="city" styleClass="error-message"/>
+
+                        <h:outputLabel value="State: "/>
+                        <h:inputText id="state" value="#{createCustomerView.customer.state}"
+                                     disabled="#{createCustomerView.showDialog}"/>
+                        <h:message for="state" styleClass="error-message"/>
+
+                    </h:panelGrid>
+                    <br/>
+                    <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                        <h:commandButton id="create" value="Create" action="#{createCustomerView.activeShowDialog()}"
+                                         disabled="#{createCustomerView.showDialog}"
+                                         styleClass="c-button u-spacing-out-right--xsmall"/>
+                        <h:commandButton value="Exit" action="#{createCustomerView.hideCreateForm()}" styleClass="c-button"
+                                         disabled="#{createCustomerView.showDialog}" immediate="true"/>
+                    </div>
+                </h:panelGroup>
+                <br/>
+                <h:form rendered="#{createCustomerView.showDialog and not createCustomerView.showCreateMessage}">
+                    <h:outputLabel value="Are you sure you want to create this customer?"/>
+                    <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                        <h:commandButton id="yes" value="Yes" action="#{createCustomerView.createCustomer()}"
+                                         styleClass="c-button u-spacing-out-right--xsmall"/>
+                        <h:commandButton value="No" action="#{createCustomerView.hideDialog()}" styleClass="c-button"
+                                         immediate="true"/>
+                    </div>
+                </h:form>
+                <h:form rendered="#{createCustomerView.showCreateMessage and createCustomerView.createStatus eq 'success'}">
+                    <h:outputText value="#{createCustomerView.createMessage}" styleClass="success-message"/>
+                    <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                        <h:commandButton value="Ok" action="#{createCustomerView.hideCreateMessage()}"
+                                         styleClass="c-button" immediate="true"/>
+                    </div>
+                </h:form>
+                <h:form rendered="#{createCustomerView.showCreateMessage and createCustomerView.createStatus eq 'failed'}">
+                    <h:outputText value="#{createCustomerView.createMessage}" styleClass="error-message"/>
+                    <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                        <h:commandButton value="Ok" action="#{createCustomerView.hideCreateMessage()}"
+                                         styleClass="c-button" immediate="true"/>
+                    </div>
+                </h:form>
+            </div>
+        </h:form>
+    <div class="o-page-wrapper">
+        <div class="o_button-wrapper">
+            <div class="o-nav_button-wrapper">
+                <h:button value="Back to dashboard" outcome="/protected/dashboard" styleClass="c-button"/>
+            </div>
+            <h:form>
+                <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button"/>
+            </h:form>
+        </div>
+        <h1 id="customers_list">Customers list</h1>
+        <h:form styleClass="c-filter">
+            <div class="c-filter__title">Filters</div>
+            <h:selectOneMenu id="chooseFilter" value="#{customerView.dropdownValue}" class="c-select">
+                <f:selectItem itemValue="#{null}" itemLabel="-- Select Attribute --"
+                              itemDisabled="#{not customerView.disableFilterField()}"/>
+                <f:selectItems id="items" value="#{customerView.filterItems}"/>
+                <f:ajax execute="@form" render="@form:inputField"/>
+            </h:selectOneMenu>
+            <h:inputText id="inputField" value="#{customerView.attributeValue}" styleClass="u-spacing-out-left--xsmall"
+                         disabled="#{customerView.disableFilterField()}">
+                <f:ajax event="keyup" render="filter"/>
+            </h:inputText>
+            <h:outputText styleClass="error-message" value="#{customerView.errorMessage}"/>
+            <div class="c-filter__button-wrapper">
+                <h:commandButton id="filter" value="Filter" action="#{customerView.refreshCustomers(true)}"
+                                 styleClass="c-button" disabled="#{customerView.disableFilterButton()}"/>
+                <h:commandButton value="Reset" action="#{customerView.resetFilter()}"
+                                 styleClass="c-button u-spacing-out-left--xsmall"/>
+            </div>
+        </h:form>
+        <h:form>
+            <h:panelGroup style="margin: 1rem" class="form-group c-pagination" id="pagination">
+                <h:panelGroup class="c-pagination__wrapper"
+                              rendered="#{not (customerView.getTotalPageCount() eq 1)}">
+                    <div class="c-pagination__buttons-wrapper">
+                        <h:commandButton styleClass="c-pagination__button c-button"
+                                         rendered="#{not (customerView.getTotalPageCount() le 11)}"
+                                         disabled="#{customerView.currentPage eq 1}" value="Start"
+                                         action="#{customerView.refreshElementsPage}"
+                                         actionListener="#{customerView.firstPage()}"
+                        />
+                        <h:commandButton styleClass="c-pagination__button c-button"
+                                         rendered="#{not (customerView.getTotalPageCount() le 1)}"
+                                         disabled="#{customerView.currentPage eq 1}" value="Prev"
+                                         action="#{customerView.refreshElementsPage}"
+                                         actionListener="#{customerView.prevPage()}"
+                        />
+                    </div>
+                    <ui:repeat id="pagination-links" value="#{customerView.getPageNumbers()}" var="page">
+                        <h:commandLink value="#{page}" class="c-pagination__link"
+                                       action="#{customerView.refreshElementsPage}"
+                                       actionListener="#{customerView.setCurrentPage(page)}"
+                                       rendered="#{customerView.currentPage != page}"
+                        />
+                        <h:outputText class="c-pagination__current-page" value="#{page}" escape="false"
+                                      rendered="#{page == customerView.currentPage}"
+                        />
+                    </ui:repeat>
+                    <div class="c-pagination__buttons-wrapper">
+                        <h:commandButton styleClass="c-pagination__button c-button"
+                                         rendered="#{not (customerView.getTotalPageCount() le 1)}"
+                                         disabled="#{customerView.currentPage eq customerView.getTotalPageCount()}"
+                                         value="Next" action="#{customerView.refreshElementsPage}"
+                                         actionListener="#{customerView.nextPage()}"
+                        />
+                        <h:commandButton styleClass="c-pagination__button c-button"
+                                         rendered="#{not (customerView.getTotalPageCount() le 11)}"
+                                         disabled="#{customerView.currentPage eq customerView.getTotalPageCount()}"
+                                         value="End" action="#{customerView.refreshElementsPage}"
+                                         actionListener="#{customerView.lastPage()}"
+                        />
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+            <div class="c-section u-spacing-out-top-bottom--small u-flex-row">
+                <label class="">Customers per page: </label>
+                <div class="u-spacing-out-left--xsmall">
+                    <h:selectOneMenu id="itemsPerPage" class="c-select" value="#{customerView.itemsPerPage}">
+                        <f:ajax render="customersTable pagination" listener="#{customerView.resetElementsPage}"/>
+                        <f:selectItem itemLabel="5" itemValue="#{5}"/>
+                        <f:selectItem itemLabel="10" itemValue="#{10}"/>
+                        <f:selectItem itemLabel="25" itemValue="#{25}"/>
+                        <f:selectItem itemLabel="50" itemValue="#{50}"/>
+                    </h:selectOneMenu>
+                </div>
+            </div>
+        </h:form>
+        <div class="c-table-legend">
+            <h:form>
+                <h:commandButton value="Create new customer"  action="#{createCustomerView.activeShowCreateForm()}"
+                                 onclick="#{createCustomerView.init()}" styleClass="c-button"/>
+            </h:form>
+            <h:outputText value="Total number of customers: #{customerView.refreshSize()}"/>
+        </div>
+
+        <h:dataTable id="customersTable" value="#{customerView.filteredCustomers}" styleClass="c-table" var="customer">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{customer.customerId}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">First name</f:facet>
+                <h:outputText value="#{customer.firstName}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Last name</f:facet>
+                <h:outputText value="#{customer.lastName}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Orders</f:facet>
+                <h:button value="More info" styleClass="c-button" outcome="/protected/master_detail_pages/customerOrders.xhtml">
+                    <f:param name="customerId" value="#{customer.customerId}"/>
+                </h:button>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Customer details</f:facet>
+                <h:button value="More info" styleClass="c-button" outcome="/protected/master_detail_pages/customerDetails.xhtml">
+                    <f:param name="customerId" value="#{customer.customerId}"/>
+                </h:button>
+            </h:column>
+        </h:dataTable>
+    </div>
+</h:body>
+</html>

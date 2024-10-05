@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html   xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<f:view>
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>SEP Sale-System</title>
+    </h:head>
+    <body>
+    <ui:composition>
+            <div class="c-side-bar c-side-bar--bgc-black-lite o-flex-col o-flex--justify-content-between">
+                <div class="c-block-menu o-flex-col o-flex--justify-content-center o-position--relative">
+                    <span class="c-block-menu__title c-block-menu__title--bold c-block-menu__title--color-gray-lite u-spacing-in-left--small">NAVIGATION-MENU</span>
+                    <h:link class="c-block-menu__item--active o-inline-flex o-flex--align-item-center"
+                            outcome="/protected/master_pages/customers">
+                        <div class="c-icon o-flex">
+                            <img src="resources/images/icons/customer_icon.png" alt="Customer icon" class="c-icon__small-img c-icon__img--color-gray u-spacing-out-right--xxsmall" />
+                        </div>
+                        <span>Customers</span>
+                        <span class="c-block-menu__arrow-right o-position--absolute"></span>
+                    </h:link>
+                    <h:link class="c-block-menu__item c-block-menu__item--hover-color-gray o-inline-flex o-flex--align-item-center u-spacing-in-left--small"
+                            outcome="/protected/master_pages/products">
+                        <div class="c-icon o-flex">
+                            <img src="resources/images/icons/product_icon.png" alt="Customer icon" class="c-icon__small-img c-icon__img--color-gray u-spacing-out-right--xxsmall" />
+                        </div>
+                        <span>Products</span>
+                    </h:link>
+                    <h:link class="c-block-menu__item c-block-menu__item--hover-color-gray o-inline-flex o-flex--align-item-center u-spacing-in-left--small"
+                            outcome="/protected/master_pages/orders">
+                        <div class="c-icon o-flex">
+                            <img src="resources/images/icons/order_icon.png" alt="Customer icon" class="c-icon__small-img c-icon__img--color-gray u-spacing-out-right--xxsmall" />
+                        </div>
+                        <span>Orders</span>
+                    </h:link>
+                    <h:link class="c-block-menu__item c-block-menu__item--hover-color-gray o-inline-flex o-flex--align-item-center u-spacing-in-left--small"
+                            outcome="/protected/master_pages/stores">
+                        <div class="c-icon o-flex">
+                            <img src="resources/images/icons/store_icon.png" alt="Customer icon" class="c-icon__small-img c-icon__img--color-gray u-spacing-out-right--xxsmall" />
+                        </div>
+                        <span>Stores</span>
+                    </h:link>
+                    <h:link class="c-block-menu__item c-block-menu__item--hover-color-gray o-inline-flex o-flex--align-item-center u-spacing-in-left--small"
+                            outcome="/protected/master_pages/staff">
+                        <div class="c-icon o-flex">
+                            <img src="resources/images/icons/staff_icon.png" alt="Customer icon" class="c-icon__small-img c-icon__img--color-gray u-spacing-out-right--xxsmall" />
+                        </div>
+                        <span>Staffs</span>
+                    </h:link>
+                </div>
+                <div class="c-copyright c-copyright--bgc-black o-flex o-flex--centered u-xsmall-text">
+                    <span>© 2023 SEP Sale-System <br />All rights reserved.</span>
+                </div>
+            </div>
+    </ui:composition>
+    </body>
+</f:view>
+</html>

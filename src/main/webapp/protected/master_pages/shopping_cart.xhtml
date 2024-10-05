@@ -1,0 +1,71 @@
+ <!DOCTYPE html>
+<html   xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<f:view>
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Team 5</title>
+    </h:head>
+    <body>
+    <ui:composition>
+        <div id="dynamic_content" class="o-page-wrapper">
+            <div class="dynamic_content_header">
+                <div class="dynamic_content_header_container">
+                    <h1 id="current_state">Shopping cart</h1>
+                </div>
+            </div>
+            <h:panelGroup styleClass="form_card">
+                <h:panelGroup styleClass="row">
+                    <h:panelGroup styleClass="form_card_header">
+
+                    </h:panelGroup>
+                    <h:panelGroup styleClass="col-12">
+
+                        <h:form id="shopping_cart_form">
+                            <h:panelGroup id="orderItemTable" styleClass="table-responsive">
+                                <h:dataTable value="#{createOrderView.orderItemsInShoppingCart}" var="orderitem" class="customer_container">
+                                    <h:column>
+                                        <f:facet styleClass="table_header" name="header">Product Name</f:facet>
+                                        <h:outputText value="#{orderitem.product.productName}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet styleClass="table_header" name="header">Price per unit</f:facet>
+                                        <h:outputText value="#{orderitem.product.listPrice} €"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet styleClass="table_header" name="header">Quantity</f:facet>
+                                        <h:outputText value="#{orderitem.quantity}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet styleClass="table_header" name="header">Discount</f:facet>
+                                        <h:outputText value="#{createOrderDetailView.getDiscountAsPercentByOrderItem(orderitem)} %"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet styleClass="table_header" name="header">Sum price </f:facet>
+                                        <h:outputText value="#{createOrderDetailView.getTotalPriceByOrderItem(orderitem)} €"/>
+                                    </h:column>
+                                    <h:column>
+                                        <h:commandButton styleClass="c-button" value="delete Item " actionListener="#{createOrderView.orderItemsInShoppingCart.remove(orderitem)}" />
+                                    </h:column>
+                                </h:dataTable>
+                            </h:panelGroup>
+
+                            <h:commandButton id="continue_shopping" styleClass="c-button u-spacing-out-right--xsmall" value="Continue shopping" action="#{createOrderView.toSelectProducts}" />
+                            <h:commandButton id="submit" disabled="#{createOrderView.orderItemsInShoppingCart.isEmpty()}" styleClass="c-button" value="Save and send order" action="create_order?knecht=true" actionListener="#{createOrderView.createOrder()}" >
+                                <f:param name="submit" value="true"/>
+                            </h:commandButton>
+                        </h:form>
+                        <h:panelGroup rendered="#{not facesContext.validationFailed}" styleClass="form-group row">
+                            <h:outputText id="successful_delete" value="Item is succesfully deleted" escape="false" styleClass="success-message"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+        </div>
+    </ui:composition>
+    </body>
+</f:view>
+</html>

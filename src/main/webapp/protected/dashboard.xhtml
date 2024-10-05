@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+    <title>Sales support system</title>
+    <h:outputStylesheet library="css" name="style.css" />
+</h:head>
+<h:body>
+    <div class="o-page-wrapper">
+        <h1 class="c-dashboard-title">DASHBOARD</h1>
+        <div class="c-dashboard-menu">
+            <span class="c-dashboard-menu__second-title">DISPLAY-OPTIONS</span>
+            <span class="c-dashboard-menu__item"><h:link value="Display customers" outcome="/protected/master_pages/customers"/></span>
+            <span class="c-dashboard-menu__item"><h:link value="Display products" outcome="/protected/master_pages/products"/></span>
+            <span class="c-dashboard-menu__item"><h:link value="Display orders" outcome="/protected/master_pages/orders"/></span>
+            <span class="c-dashboard-menu__item"><h:link value="Display stores" outcome="/protected/master_pages/stores"/></span>
+            <span class="c-dashboard-menu__item"><h:link value="Display staff" outcome="/protected/master_pages/staff"/></span>
+        </div>
+        <h:form>
+            <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button u-spacing-out-top--medium"/>
+        </h:form>
+    </div>
+</h:body>
+</html>
+
+

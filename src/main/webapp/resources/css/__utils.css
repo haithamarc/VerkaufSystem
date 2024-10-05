@@ -1,0 +1,282 @@
+/*  DEFINITIONS
+*   
+*   xxsmall = 0.5rem
+    xsmall = 0.8rem
+*   small = 0.9rem
+*   normal = 1.5rem
+*   medium = 1.8rem
+*   large = 3rem
+*   xlarge = 4.5rem
+*   xxxlarge = 10rem
+*
+*
+*/
+
+/* U-SPACING-IN */
+
+.u-spacing-in-left--small {
+    padding-left: 0.9rem;
+}
+
+/* U-SPACING-OUT */
+
+.u-spacing-out-right--xxsmall {
+    margin-right: 0.5rem;
+}
+
+.u-spacing-out-top--xxsmall {
+    margin-top: 0.5rem;
+}
+
+.u-spacing-out-left--xxsmall {
+    margin-left: 2rem;
+}
+
+.u-spacing-out-top--small {
+    padding-top: 0.9rem;
+}
+
+.u-spacing-out-bottom--small {
+    padding-bottom: 0.9rem;
+}
+
+.u-spacing-out-top-bottom--small {
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+}
+
+.u-spacing-out-right--medium {
+    margin-right: 1.8rem;
+}
+
+.u-spacing-out-left--medium {
+    margin-left: 1.8rem;
+}
+
+.u-spacing-out-left-right--medium {
+    margin-right: 1.8rem;
+    margin-left: 1.8rem;
+}
+
+.u-spacing-out-top--medium {
+    margin-top: 1.8rem;
+}
+
+.u-spacing-out-bottom--medium {
+    margin-bottom: 1.8rem;
+}
+
+.u-spacing-out-top-bottom--medium {
+    margin-top: 1.8rem;
+    margin-bottom: 1.8rem;
+}
+
+.u-spacing-out-bottom--large {
+    margin-bottom: 3rem;
+}
+
+.u-spacing-out-top-bottom--large {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.u-spacing-out-right--xlarge {
+    margin-right: 4.5rem;
+}
+
+.u-spacing-out-left--xlarge {
+    margin-left: 4.5rem;
+}
+
+.u-spacing-out-left-right--xlarge {
+    margin-left: 4.5rem;
+    margin-right: 4.5rem;
+}
+
+.u-spacing-out--xlarge {
+    margin: 4.5rem;
+}
+
+.u-spacing-out-left-right--xxxlarge {
+    margin-left: 15rem;
+    margin-right: 15rem;
+}
+
+/* U-TEXT */
+
+.u-xsmall-text {
+    font-size: 0.8rem;
+}
+
+.u-normal-text {
+    font-size: 1.3rem;
+}
+
+.u-text--align-center {
+    text-align: center;
+}
+
+.u-text--undeline {
+    text-decoration: underline;
+}
+
+/* U-CURSOR */
+
+.u-cursor--pointer{
+    cursor: pointer !important;
+}
+
+.u-cursor--not-allowed{
+    cursor: not-allowed !important;
+}
+
+/* U-ERROR-MESSAGE */
+
+.u-error-message{
+    color: #8B0000;
+    display: inline-block;
+    margin: 0 0 0 1rem;
+}
+
+.u-success-message{
+    color: green;
+    display: inline-block;
+    margin: 0 0 0 1rem;
+}
+
+/* U-DISPLAY */
+
+.u-display-flex{
+    display: flex;
+    height: 100%;
+}
+
+.u-display-flex--justify-center{
+    justify-content: center;
+}
+
+.u-display--flex-xl-lg {
+    display: flex;
+}
+
+.u-display--block-xl-lg {
+    display: block;
+}
+
+.u-display--grid-xl-lg {
+    display: grid;
+}
+
+.u-display--block--md-sm-xs {
+    display: block;
+}
+
+.u-display--flex--md-sm-xs {
+    display: flex;
+}
+
+.u-display--flex--md-sm {
+    display: flex;
+}
+
+.u-display--grid-xs {
+    display: grid;
+}
+
+
+/*  U-HIDE */
+
+.u-hide {
+    display: none;
+}
+
+
+
+/* U-ANIMATION */
+
+.u-fadein {
+    animation-duration: 0.2s;
+    animation-name: fadein;
+}
+
+.u-fadeout {
+    animation-duration: 0.2s;
+    animation-name: fadeout;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.u-fadein-right {
+    animation-duration: 0.8s;
+    animation-name: fadein-right;
+}
+
+@keyframes fadein-right {
+    0% {
+        transform: translateX(400px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.u-fadeout-right {
+    animation-duration: 0.8s;
+    animation-name: fadeout-right;
+}
+
+@keyframes fadeout-right {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(400px);
+    }
+}
+
+
+.u-fadein--page-cover {
+    animation-duration: 0.2s;
+    animation-name: fadein-page-cover;
+}
+
+.u-fadeout--page-cover {
+    animation-duration: 0.8s;
+    animation-name: fadeout-page-cover;
+}
+
+@keyframes fadein-page-cover {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes fadeout-page-cover {
+    0% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+    }
+}

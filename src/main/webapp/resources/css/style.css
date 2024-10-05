@@ -1,0 +1,287 @@
+/*BASE*/
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+body{
+    margin: 0!important;
+}
+
+/*COMPONENTS*/
+
+/*horizontal-bar*/
+.c-horizontal-bar{
+    border: 1px solid black;
+    opacity: 0.1;
+    width: 80%;
+}
+
+/*Dashboad*/
+
+.c-dashboard-wrapper{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.c-dashboard-title{
+    font-weight: bold;
+}
+
+.c-dashboard-menu{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    padding: 1vw;
+    margin-top: 5px;
+}
+
+.c-dashboard-menu__item{
+    margin: 0.8vw 0;
+}
+
+.c-dashboard-menu__item > a{
+    text-decoration: none;
+    color: black;
+}
+
+.c-dashboard-menu__item > a:hover{
+    cursor: pointer;
+    color: #898989;
+}
+
+.c-dashboard-menu__item:first-child{
+    margin-top: 1.6vw;
+}
+
+.c-dashboard-menu__first-title{
+    font-weight: bold;
+    margin-bottom: 0.8vw;
+}
+
+.c-dashboard-menu__second-title{
+    font-weight: bold;
+    margin-bottom: 0.8vw;
+    margin-top: 0.8vw;
+}
+
+
+/*Table*/
+
+.c-table{
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+    margin-bottom: 2vw;
+}
+
+.c-table th, .c-table td {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+}
+
+.c-table tr{
+    margin: 1vw;
+}
+
+/*Button*/
+
+.c-button{
+    cursor: pointer;
+}
+
+/*Sectition*/
+
+.c-section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3vw;
+}
+
+/*Filter*/
+.c-filter{
+    margin-bottom: 2vw;
+    border: solid black 0.5px;
+    padding: 1vw;
+}
+
+.c-filter__title{
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 1vw;
+}
+
+.c-filter__button-wrapper{
+    margin-top: 1vw;
+}
+
+/*Select*/
+
+.c-select{
+    cursor: pointer;
+}
+
+/*Pagination*/
+
+.c-pagination{
+
+}
+
+.c-pagination__wrapper{
+    display: flex;
+}
+
+.c-pagination__buttons-wrapper{
+    margin: 0 0.5vw;
+}
+
+.c-pagination__button{
+    margin: 0 0.2vw;
+}
+
+.c-pagination__links-wrapper{
+    margin: 0 1vw;
+}
+
+.c-pagination__link{
+    display: inline-block;
+    margin: 0 0.2vw;
+}
+
+.c-pagination__current-page{
+    color: red;
+    font-weight: bold;
+    margin: 0 0.2vw;
+}
+
+/*Table-legend*/
+
+.c-table-legend{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1vw;
+}
+
+/*LAYOUT*/
+
+.o-page-wrapper{
+    width: 45vw;
+    margin: 0 27.5vw;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.o-nav_button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+}
+
+.o_button-wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin:2vw 0;
+}
+
+.c-pop-up__wrapper{
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+.c-pop-up{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    background-color: white;
+    opacity: 1;
+    width: fit-content;
+    height: fit-content;
+    padding: 2vw;
+    border-radius: 1vw;
+}
+
+/*UTILS*/
+
+/*U-SPACING*/
+
+.u-spacing-out-right--xsmall{
+    margin-right: 0.5vw!important;
+}
+
+.u-spacing-out-left--xsmall{
+    margin-left: 0.5vw!important;
+}
+
+.u-spacing-out-top-neg--medium{
+    margin-top: -1vw!important;
+}
+
+.u-spacing-out-top--medium{
+    margin-top: 2vw!important;
+}
+
+.u-spacing-out-top--xsmall{
+    margin-top: 0.5vw!important;
+}
+
+.u-spacing-out-top--small{
+    margin-top: 1vw!important;
+}
+
+.u-spacing-out-bottom-none{
+    margin-bottom: 0 !important;
+}
+
+.u-spacing-out-bottom-medium{
+    margin-bottom: 2vw!important;
+}
+
+
+.error-message{
+    color: red;
+    display:inline-block;
+    margin-left: 0.5vw;
+}
+
+.success-message{
+    color:green;
+    display: inline-block;
+    margin-bottom: 2vw;
+}
+
+/*U-FLEX*/
+
+.u-flex-justify-content--right{
+    display: flex;
+    justify-content: right !important;
+}
+
+.u-flex-justify-content--center{
+    display: flex;
+    justify-content: center !important;
+}
+
+.u-flex-align-items--center{
+    display: flex;
+    align-items: center !important;
+}
+
+.u-flex-column{
+    display: flex;
+    flex-direction: column!important;
+}

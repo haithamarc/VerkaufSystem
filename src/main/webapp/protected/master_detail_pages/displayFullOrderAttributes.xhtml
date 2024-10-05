@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="EN">
+<h:head>
+   <title>Display order details</title>
+   <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<h:body>
+   <div class="o-page-wrapper">
+      <f:metadata>
+         <f:viewParam name="orderId" value="#{orderDetailsView.orderId}"/>
+         <f:viewAction action="#{orderDetailsView.init()}"/>
+      </f:metadata>
+      <div class="o_button-wrapper">
+         <h:button value="Return to orders list " outcome="/protected/master_pages/orders.xhtml" styleClass="c-button u-spacing-out-right--xsmall"/>
+         <h:button value="Return to dashboard " outcome="/protected/dashboard.xhtml" styleClass="c-button"/>
+      </div>
+      <h1>Order #{orderDetailsView.order.orderId}  details</h1>
+      <h:form prependId="false" rendered="#{not orderDetailsView.activeEditForm}">
+         <h:panelGrid columns="2">
+            <h:outputLabel value="Order ID:" />
+            <h:outputText value="#{orderDetailsView.order.orderId}" />
+            <h:outputLabel value="Order date:" />
+            <h:outputText value="#{orderDetailsView.order.orderDate}" converter="localDateConverter" />
+            <h:outputLabel value="Required date:" />
+            <h:outputText value="#{orderDetailsView.order.requiredDate}" converter="localDateConverter" />
+            <h:outputLabel value="Shipped date:" />
+            <h:outputText value="#{orderDetailsView.order.shippedDate}" converter="localDateConverter"/>
+            <h:outputLabel value="Order  Status:" />
+            <h:outputText value="#{orderDetailsView.order.orderStatus.getName()}" />
+            <h:outputLabel value="Customer name:" />
+            <h:outputText value="#{orderDetailsView.order.customer.firstName} #{orderDetailsView.order.customer.lastName}" />
+            <h:outputLabel value="Staff Id:" />
+            <h:outputText value="#{orderDetailsView.order.staff.staffId}  " />
+         </h:panelGrid>
+         <div>
+            <h:commandButton value="Edit" rendered="#{not orderDetailsView.activeEditForm}" action="#{orderDetailsView.activeEdit()}" styleClass="c-button"/>
+         </div>
+      </h:form>
+      <h:form rendered="#{orderDetailsView.activeEditForm}">
+         <table>
+            <tr>
+               <td>Shipped date:</td>
+               <td>
+                  <h:inputText id="shippedDate" value="#{orderDetailsView.shippedDate}"
+                               type="date" required="true" requiredMessage=" First name cannot be empty"/>
+                  <h:message for="shippedDate" styleClass="error-message"/>
+
+               </td>
+            </tr>
+            <tr>
+            <td>
+               State :
+            </td>
+               <td>
+               <h:selectOneMenu id="chooseState" value="#{orderDetailsView.order.orderStatus}" styleClass="c-select u-spacing-out-top--xsmall">
+                  <h:message for="chooseState" styleClass="error-message"/>
+                  <f:selectItem itemValue="NO_STATE" itemLabel="-- Select Order State --"/>
+                  <f:selectItem itemValue="RECEIVED" itemLabel="RECEIVED"/>
+                  <f:selectItem itemValue="IN_PROGRESS" itemLabel="IN_PROGRESS"/>
+                  <f:selectItem itemValue="CANCELED" itemLabel="CANCELED"/>
+                  <f:selectItem itemValue="COMPLETED" itemLabel="COMPLETED"/>
+               </h:selectOneMenu>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  Customer:
+               </td>
+               <td>
+                  <h:selectOneMenu id="chooseCus" value="#{orderDetailsView.selectedCustomerId}" styleClass="c-dropdown" >
+                     <h:message for="chooseCus" styleClass="error-message"/>
+                     <f:selectItem itemValue="0" itemLabel="-- Select Customer --" />
+                     <f:selectItems value="#{orderDetailsView.getCustomerList()}" var="customer" itemValue="#{customer.customerId}" itemLabel="#{customer.firstName} #{customer.lastName}" />
+                  </h:selectOneMenu>
+               </td>
+            </tr>
+
+         </table>
+
+         <div class="o-nav_button-wrapper u-flex-justify-content--center">
+            <h:commandButton value="Update"  action="#{orderDetailsView.updateOrder()}" styleClass="c-button u-spacing-out-right--xsmall" />
+            <h:commandButton value="Cancel"  action="#{orderDetailsView.cancel()}" styleClass="c-button" immediate="true"/>
+         </div>
+      </h:form>
+
+   </div>
+
+</h:body>
+</html>

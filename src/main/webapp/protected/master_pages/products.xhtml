@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="EN">
+
+<h:head>
+    <title>Display products</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<h:body>
+    <h:form styleClass="c-pop-up__wrapper" rendered="#{productView.createView}">
+        <div class="c-pop-up">
+            <h:panelGrid columns="3" rendered="#{not productView.showSuccessMessage}">
+                <h:outputLabel value="List Price:" />
+                <h:inputText id="listPrice" value="#{productView.product.listPrice}"
+                             disabled="#{productView.createConfirmation}" style="width: 85%"/>
+                <h:message for="listPrice" styleClass="error-message"/>
+                <h:outputLabel value="Model-Year:" />
+                <h:inputText id="modelYear" value="#{productView.product.modelYear}"
+                             disabled="#{productView.createConfirmation}" style="width: 85%"/>
+                <h:message for="modelYear" styleClass="error-message"/>
+                <h:outputLabel value="Product name:" />
+                <h:inputText id="name" value="#{productView.product.productName}"
+                             disabled="#{productView.createConfirmation}" style="width: 85%" />
+                <h:message for="name" styleClass="error-message"/>
+                <h:outputLabel value="Brand:" />
+                <h:selectOneMenu id="chooseBrandCreate" value="#{productView.brandId}"
+                                 class="c-select" disabled="#{productView.createConfirmation}"
+                                 required="true" requiredMessage="Brand field must not be empty!"
+                                 style="width: 90%">
+                    <f:selectItem itemValue="#{null}" itemLabel="-- Select Brand --"/>
+                    <f:selectItems value="#{productView.listBrands()}" var="brand" itemValue="#{brand.brandId}"
+                                   itemLabel="#{brand.brandName}"/>
+                    <f:ajax execute="@form" render="@form:create"/>
+                </h:selectOneMenu>
+                <h:message for="chooseBrandCreate" styleClass="error-message"/>
+                <h:outputLabel value="Category" />
+                <h:selectOneMenu id="chooseCategoryCreate" value="#{productView.categoryId}"
+                                 class="c-select" disabled="#{productView.createConfirmation}"
+                                 required="true" requiredMessage="Category field must not be empty!"
+                                 style="width: 90%">
+                    <f:selectItem itemValue="#{null}" itemLabel="-- Select Category --"/>
+                    <f:selectItems value="#{productView.listCategories()}" var="category" itemValue="#{category.categoryId}"
+                                   itemLabel="#{category.categoryName}"/>
+                    <f:ajax execute="@form" render="@form:create"/>
+                </h:selectOneMenu>
+                <h:message for="chooseCategoryCreate" styleClass="error-message"/>
+            </h:panelGrid>
+            <br/>
+            <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                <h:commandButton styleClass="c-button u-spacing-out-right--xsmall" value="Create" action="#{productView.confirmCreate()}" rendered="#{not productView.createConfirmation and not productView.showSuccessMessage}"/>
+                <h:commandButton styleClass="c-button" value="Exit" action="#{productView.displayCreateForm()}" immediate="true" rendered="#{not productView.createConfirmation and not productView.showSuccessMessage}"/>
+            </div>
+
+            <h:form rendered="#{productView.createConfirmation and productView.createView}">
+                <h:outputLabel value="Are you sure you want to create the product with these information?" />
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:commandButton styleClass="c-button u-spacing-out-right--xsmall" value="Yes" action="#{productView.createProduct()}" />
+                    <h:commandButton styleClass="c-button" value="No" action="#{productView.confirmCreate()}" immediate="true" />
+                </div>
+            </h:form>
+
+            <h:form id="success" rendered="#{productView.showSuccessMessage}">
+                <h:outputText value="#{productView.creationStateMessage}" styleClass="success-message"/>
+                <br/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:commandButton value="Ok" action="#{productView.displaySuccessMessage()}"
+                                     styleClass="c-button" immediate="true"/>
+                </div>
+            </h:form>
+        </div>
+    </h:form>
+    <div class="o-page-wrapper">
+        <div class="o_button-wrapper">
+            <h:button value="Back to dashboard" outcome="/protected/dashboard.xhtml" styleClass="c-button"/>
+            <h:form>
+                <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button"/>
+            </h:form>
+        </div>
+        <br/><br/>
+        <h1 id="product_list">
+            <h:outputLabel value="Products list" />
+        </h1>
+        <h:form styleClass="c-filter">
+            <div class="c-filter__title">Filters</div>
+            <h:selectOneMenu id="chooseExtra" value="#{productView.dropdownValue}" class="c-select u-spacing-out-top--xsmall">
+                <h:message for="chooseExtra" styleClass="error-message"/>
+                <f:selectItem itemValue="0" itemLabel="-- Select Attribute --" />
+                <f:selectItems value="#{productView.attributeList}" var="extra" itemValue="#{extra}"
+                               itemLabel="#{extra}"/>
+                <f:ajax execute="@form" render="@form:filter inputField"/>
+            </h:selectOneMenu>
+            <h:inputText id="inputField" value="#{productView.attributeValue}"
+                         styleClass="u-spacing-out-left--xsmall" disabled="#{productView.searchFieldDisabled()}">
+                <f:ajax event="keyup" render="filter" />
+            </h:inputText>
+            <h:outputText styleClass="error-message" value="#{productView.errorMessage}"/>
+            <div class="c-filter__button-wrapper">
+                <h:commandButton id="filter" value="Filter" action="#{productView.listProductsFiltered(true)}"
+                                 disabled="#{productView.filterButtonDisabled(false)}" styleClass="c-button"/>
+                <h:commandButton id="reset" value="Reset" action="#{productView.resetFilter()}" styleClass="c-button u-spacing-out-left--xsmall"/>
+            </div>
+        </h:form>
+        <h:form>
+            <h:panelGroup style="margin: 1rem" class="form-group c-pagination" id="pagination">
+                <h:panelGroup class="c-pagination__wrapper" rendered="#{not (productView.getTotalPageCount() eq 1)}">
+                    <div class="c-pagination__buttons-wrapper">
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (productView.getTotalPageCount() le 11)}" disabled="#{productView.currentPage eq 1}" value="Start" action="#{productView.refreshElementsPage}" actionListener="#{productView.firstPage()}" />
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (productView.getTotalPageCount() le 1)}" disabled="#{productView.currentPage eq 1}" value="Prev" action="#{productView.refreshElementsPage}" actionListener="#{productView.prevPage()}" />
+                    </div>
+
+                    <ui:repeat id="pagination-links" value="#{productView.getPageNumbers()}" var="page">
+                        <h:commandLink value="#{page}"
+                                       class="c-pagination__link"
+                                       action="#{productView.refreshElementsPage}"
+                                       actionListener="#{productView.setCurrentPage(page)}"
+                                       rendered="#{productView.currentPage != page}"
+                        />
+                        <h:outputText class="c-pagination__current-page"
+                                      value="#{page}"
+                                      escape="false"
+                                      rendered="#{page == productView.currentPage}"
+                        />
+                    </ui:repeat>
+
+                    <div class="c-pagination__buttons-wrapper">
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (productView.getTotalPageCount() le 1)}" disabled="#{productView.currentPage eq productView.getTotalPageCount()}" value="Next" action="#{productView.refreshElementsPage}" actionListener="#{productView.nextPage()}" />
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (productView.getTotalPageCount() le 11)}" disabled="#{productView.currentPage eq productView.getTotalPageCount()}" value="End" action="#{productView.refreshElementsPage}" actionListener="#{productView.lastPage()}" />
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+            <div class="c-section u-spacing-out-top-bottom--small u-flex-row">
+                <label class="">Product per page: </label>
+                <div class="u-spacing-out-left--xsmall">
+                    <h:selectOneMenu id="itemsPerPage" class="c-select" value="#{productView.itemsPerPage}">
+                        <f:ajax render="productsTable pagination" listener="#{productView.resetElementsPage}"/>
+
+                        <f:selectItem itemLabel="5" itemValue="#{5}"/>
+                        <f:selectItem itemLabel="10" itemValue="#{10}"/>
+                        <f:selectItem itemLabel="25" itemValue="#{25}"/>
+                        <f:selectItem itemLabel="50" itemValue="#{50}"/>
+
+                    </h:selectOneMenu>
+                </div>
+            </div>
+        </h:form>
+        <div class="c-table-legend">
+            <h:form>
+                <h:commandButton
+                        id="createProductBtn"
+                        value="Create new product"
+                        action="#{productView.displayCreateForm()}"
+                        rendered="#{not productView.createView}"
+                        styleClass="c-button"/>
+            </h:form>
+            <h:outputText value="Total number of products: #{productView.allProductSize}" />
+        </div>
+        <h:dataTable id="productsTable" value="#{productView.productList}" var="product" styleClass="c-table">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{product.productId}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Product Name</f:facet>
+                <h:outputText value="#{product.productName}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Product details</f:facet>
+                    <h:button value="To detailed view"
+                              outcome="/protected/master_detail_pages/productDetails.xhtml"
+                              styleClass="c-button">
+                        <f:param name="productId" value="#{product.productId}" />
+                    </h:button>
+            </h:column>
+        </h:dataTable>
+    </div>
+</h:body>
+</html>

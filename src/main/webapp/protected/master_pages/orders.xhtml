@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="EN">
+<h:head>
+    <title>Display orders</title>
+    <h:outputStylesheet library="css" name="style.css" />
+</h:head>
+<h:body>
+    <div class="o-page-wrapper">
+        <div class="o_button-wrapper">
+            <div class="o-nav_button-wrapper">
+                <h:button value="Back to dashboard" outcome="/protected/dashboard" styleClass="c-button"/>
+            </div>
+            <h:form>
+                <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button"/>
+            </h:form>
+        </div>
+
+        <h1 id="order_list" >The Orders list</h1>
+        <h:form styleClass="c-filter">
+            <div class="c-filter__title">Filters</div>
+            <h:selectOneMenu id="chooseExtra" value="#{orderView.dropdownValue}" styleClass="c-select">
+                <h:message for="chooseExtra" styleClass="error-message"/>
+                <f:selectItem itemValue="0" itemLabel="-- Select Date Type --"/>
+                <f:selectItems value="#{orderView.attributeList}" var="extra" itemValue="#{extra}"
+                               itemLabel="#{extra}"/>
+                <f:ajax execute="@form" render="@form:filter input"/>
+            </h:selectOneMenu>
+            <h:inputText id ="input" type="date" styleClass="u-spacing-out-left--xsmall" value="#{orderView.attributeValue}" disabled="#{orderView.isDateDisabled()}" />
+            <br/>
+            <h:selectOneMenu id="chooseState" value="#{orderView.orderStatus}" styleClass="c-select u-spacing-out-top--xsmall">
+                <h:message for="chooseState" styleClass="error-message"/>
+                <f:selectItem itemValue="NO_STATE" itemLabel="-- Select Order State --"/>
+                <f:selectItem itemValue="RECEIVED" itemLabel="RECEIVED"/>
+                <f:selectItem itemValue="IN_PROGRESS" itemLabel="IN_PROGRESS"/>
+                <f:selectItem itemValue="CANCELED" itemLabel="CANCELED"/>
+                <f:selectItem itemValue="COMPLETED" itemLabel="COMPLETED"/>
+                <f:ajax execute="@form" render="@form:filter"/>
+            </h:selectOneMenu>
+            <div class="u-spacing-out-top--xsmall">
+                <h:outputLabel>Order Id :</h:outputLabel>
+                <h:inputText label="OrderId"
+                             id="orderId" value="#{orderView.inputOrderId}" styleClass="u-spacing-out-left--xsmall" required="false" converterMessage="Please enter digits only." onchange="#{orderView.filterButtonEnable()}">
+                    <f:ajax event="keyup" listener="#{orderView.filterButtonEnable()}" render="filter" />
+                </h:inputText>
+                <h:outputText styleClass="error-message" value="#{orderView.errorMessage}" />
+            </div>
+            <div class="c-filter__button-wrapper">
+                <h:commandButton id="filter" value=" Filter" action="#{orderView.listOrderFiltered()}" update="@form " disabled="#{orderView.filterButtonEnable()}"
+                                 styleClass="c-button"/>
+                <h:commandButton id="reset" value="Reset" action="#{orderView.resetFilter()}" styleClass="c-button u-spacing-out-left--xsmall">
+                    <f:ajax execute="@form" render="@form:chooseExtra input"   />
+                </h:commandButton>
+            </div>
+
+        </h:form>
+        <h:form>
+            <h:panelGroup style="margin: 1rem" class="form-group c-pagination" id="pagination">
+                <h:panelGroup class="c-pagination__wrapper" rendered="#{not (orderView.getTotalPageCount() eq 1)}">
+                    <div class="c-pagination__buttons-wrapper">
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (orderView.getTotalPageCount() le 11)}" disabled="#{orderView.currentPage eq 1}" value="Start" action="#{orderView.refreshElementsPage}" actionListener="#{orderView.firstPage()}" />
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (orderView.getTotalPageCount() le 1)}" disabled="#{orderView.currentPage eq 1}" value="Prev" action="#{orderView.refreshElementsPage}" actionListener="#{orderView.prevPage()}" />
+                    </div>
+
+                    <ui:repeat id="pagination-links" class="c-pagination__links-wrapper" value="#{orderView.getPageNumbers()}" var="page">
+                        <h:commandLink value="#{page}"
+                                       class="c-pagination__link"
+                                       action="#{orderView.refreshElementsPage}"
+                                       actionListener="#{orderView.setCurrentPage(page)}"
+                                       rendered="#{orderView.currentPage != page}"
+                        />
+                        <h:outputText class="c-pagination__current-page"
+                                      value="#{page}"
+                                      escape="false"
+                                      rendered="#{page == orderView.currentPage}"
+                        />
+                    </ui:repeat>
+                    <div class="c-pagination__buttons-wrapper">
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (orderView.getTotalPageCount() le 1)}" disabled="#{orderView.currentPage eq orderView.getTotalPageCount()}" value="Next" action="#{orderView.refreshElementsPage}" actionListener="#{orderView.nextPage()}" />
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (orderView.getTotalPageCount() le 11)}" disabled="#{orderView.currentPage eq orderView.getTotalPageCount()}" value="End" action="#{orderView.refreshElementsPage}" actionListener="#{orderView.lastPage()}" />
+                    </div>
+
+                </h:panelGroup>
+            </h:panelGroup>
+            <div class="c-section u-spacing-out-top-bottom--small u-flex-row">
+                <label class="">Order per page: </label>
+                <div class="u-spacing-out-left--xsmall">
+                    <h:selectOneMenu id="itemsPerPage" class="c-select" value="#{orderView.itemsPerPage}">
+                        <f:ajax render="ordersTable pagination" listener="#{orderView.resetElementsPage}"/>
+                        <f:selectItem itemLabel="5" itemValue="#{5}"/>
+                        <f:selectItem itemLabel="10" itemValue="#{10}"/>
+                        <f:selectItem itemLabel="25" itemValue="#{25}"/>
+                        <f:selectItem itemLabel="50" itemValue="#{50}"/>
+                    </h:selectOneMenu>
+                </div>
+            </div>
+        </h:form>
+
+        <div class="c-table-legend">
+            <h:form>
+                <h:commandButton value="Create new Order"
+                                 action="/protected/master_pages/create_order?faces-redirect=true" styleClass="c-button" />
+            </h:form>
+            <h:outputText value="Total number of orders:  #{orderView.allOrderSize}" />
+        </div>
+
+        <h:dataTable id="ordersTable" value="#{orderView.orderList}" var="order" styleClass="c-table">
+            <h:column>
+                <f:facet name="header">Order serial number</f:facet>
+                <h:outputText value="#{order.orderId}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Order  Status</f:facet>
+                <h:outputText value="#{order.orderStatus.getName()}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header"> Details</f:facet>
+                <h:button value="More info" outcome="/protected/master_detail_pages/displayFullOrderAttributes.xhtml" includeViewParams="false" styleClass="c-button">
+                    <f:param name="orderId" value="#{order.orderId}" />
+                </h:button>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Items Details</f:facet>
+                <h:button value="Items" outcome="/protected/master_detail_pages/orderItems.xhtml" includeViewParams="false" styleClass="c-button">
+                    <f:param name="orderId" value="#{order.orderId}" />
+                </h:button>
+            </h:column>
+        </h:dataTable>
+    </div>
+</h:body>
+</html>

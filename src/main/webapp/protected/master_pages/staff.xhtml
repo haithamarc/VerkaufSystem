@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="EN">
+
+<h:head>
+    <title>Display staff</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<h:body>
+    <div class="o-page-wrapper">
+        <h:form styleClass="c-pop-up__wrapper" rendered="#{staffView.createView}">
+            <div class="c-pop-up">
+                <h:panelGrid columns="3" rendered="#{not staffView.showSuccessMessage}">
+                    <h:outputLabel value="Email:"/>
+                    <h:inputText id="email" value="#{staffView.staff.email}"
+                                 disabled="#{staffView.createConfirmation}" style="width: 85%"/>
+                    <h:message for="email" styleClass="error-message"/>
+                    <h:outputLabel value="First name:"/>
+                    <h:inputText id="firstName" value="#{staffView.staff.firstName}"
+                                 disabled="#{staffView.createConfirmation}" style="width: 85%"/>
+                    <h:message for="firstName" styleClass="error-message"/>
+                    <h:outputLabel value="Last name:"/>
+                    <h:inputText id="lastName" value="#{staffView.staff.lastName}"
+                                 disabled="#{staffView.createConfirmation}" style="width: 85%"/>
+                    <h:message for="lastName" styleClass="error-message"/>
+                    <h:outputLabel value="Phone:"/>
+                    <h:inputText id="phone" value="#{staffView.staff.phone}" disabled="#{staffView.createConfirmation}"
+                                 maxlength="10" required="false" style="width: 85%"
+                                 validatorMessage="Must consist of 10 digits and omit the leading 0!">
+                        <f:validateRegex pattern="(?!0)\d{10}$|^$"/>
+                    </h:inputText>
+                    <h:message for="phone" styleClass="error-message"/>
+                    <h:outputLabel value="Active:"/>
+                    <h:selectOneMenu id="chooseState" value="#{staffView.staff.active}"
+                                     class="c-select" disabled="#{staffView.createConfirmation}"
+                                     style="width: 90%">
+                        <f:selectItem itemValue="#{null}" itemLabel="-- Select Active State --"/>
+                        <f:selectItem itemValue="ACTIVE" itemLabel="ACTIVE"/>
+                        <f:selectItem itemValue="INACTIVE" itemLabel="INACTIVE"/>
+                        <f:ajax execute="@form" render="@form:create"/>
+                    </h:selectOneMenu>
+                    <h:message for="chooseState" styleClass="error-message"/>
+                    <h:outputLabel value="Manager:"/>
+                    <h:selectOneMenu id="chooseManager" value="#{staffView.managerId}"
+                                     class="c-select" disabled="#{staffView.createConfirmation}"
+                                     style="width: 90%">
+                        <f:selectItem itemValue="#{null}" itemLabel="-- Select Manager --"/>
+                        <f:selectItems value="#{staffView.listStaff()}" var="manager" itemValue="#{manager.staffId}"
+                                       itemLabel="#{manager.firstName.concat(' ').concat(manager.lastName)}"/>
+                        <f:ajax execute="@form" render="@form:create"/>
+                    </h:selectOneMenu>
+                    <h:message for="chooseManager" styleClass="error-message"/>
+                    <h:outputLabel value="Store:"/>
+                    <h:selectOneMenu id="chooseStore" value="#{staffView.storeId}"
+                                     class="c-select" disabled="#{staffView.createConfirmation}"
+                                     required="true" requiredMessage="A store has to be selected!"
+                                     style="width: 90%">
+                        <f:selectItem itemValue="#{null}" itemLabel="-- Select Store --"/>
+                        <f:selectItems value="#{staffView.listStores()}" var="store" itemValue="#{store.storeId}"
+                                       itemLabel="#{store.storeName}"/>
+                        <f:ajax execute="@form" render="@form:create"/>
+                    </h:selectOneMenu>
+                    <h:message for="chooseStore" styleClass="error-message"/>
+                </h:panelGrid>
+                <br/>
+                <div class="u-flex-align-items--center">
+                    <h:commandButton styleClass="c-button u-spacing-out-right--xsmall" value="Create" action="#{staffView.confirmCreate()}" rendered="#{not staffView.createConfirmation and not staffView.showSuccessMessage}"/>
+                    <h:commandButton styleClass="c-button" value="Exit" action="#{staffView.displayCreateForm()}" immediate="true" rendered="#{not staffView.createConfirmation and not staffView.showSuccessMessage}"/>
+                </div>
+                <h:form rendered="#{staffView.createConfirmation}">
+                    <h:outputLabel value="Are you sure you want to create the staff with these information?" />
+                    <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                        <h:commandButton styleClass="c-button u-spacing-out-right--xsmall" value="Yes" action="#{staffView.createStaff()}" />
+                        <h:commandButton styleClass="c-button" value="No" action="#{staffView.confirmCreate()}" immediate="true" />
+                    </div>
+                </h:form>
+                <h:form rendered="#{staffView.showSuccessMessage}">
+                    <h:outputText value="#{staffView.creationStateMessage}" styleClass="success-message"/>
+                    <br/>
+                    <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                        <h:commandButton value="Ok" action="#{staffView.displaySuccessMessage()}"
+                                         styleClass="c-button" />
+                    </div>
+                </h:form>
+            </div>
+        </h:form>
+        <div class="o_button-wrapper">
+            <h:button value="Back to dashboard" outcome="/protected/dashboard.xhtml" styleClass="c-button"/>
+            <h:form>
+                <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button"/>
+            </h:form>
+        </div>
+        <br/><br/>
+        <h1 id="product_list">
+            <h:outputLabel value="Staff list" />
+        </h1>
+        <h:form styleClass="c-filter">
+            <div class="c-filter__title">
+                <h:outputLabel value="Filters" />
+            </div>
+            <h:selectOneMenu id="chooseExtra" value="#{staffView.dropdownValue}" class="c-select u-spacing-out-top--xsmall">
+                <h:message for="chooseExtra" styleClass="error-message"/>
+                <f:selectItem itemValue="0" itemLabel="-- Select Attribute --" />
+                <f:selectItems value="#{staffView.attributeList}" var="extra" itemValue="#{extra}"
+                               itemLabel="#{extra}"/>
+                <f:ajax execute="@form" render="@form:filter inputField"/>
+            </h:selectOneMenu>
+            <h:inputText id="inputField" value="#{staffView.attributeValue}"
+                         styleClass="u-spacing-out-left--xsmall" disabled="#{staffView.searchFieldDisabled()}">
+                <f:ajax event="keyup" render="filter" />
+            </h:inputText>
+            <h:outputText styleClass="error-message" value="#{staffView.errorMessage}"/>
+            <div class="c-filter__button-wrapper">
+                <h:commandButton id="filter" value="Filter" action="#{staffView.listStaffFiltered(true)}"
+                                 disabled="#{staffView.filterButtonDisabled(false)}" styleClass="c-button"/>
+                <h:commandButton id="reset" value="Reset" action="#{staffView.resetFilter()}" styleClass="c-button u-spacing-out-left--xsmall"/>
+            </div>
+        </h:form>
+        <h:form>
+            <h:panelGroup style="margin: 1rem" class="form-group c-pagination" id="pagination">
+                <h:panelGroup class="c-pagination__wrapper" rendered="#{not (staffView.getTotalPageCount() eq 1)}">
+                    <div class="c-pagination__buttons-wrapper">
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (staffView.getTotalPageCount() le 11)}" disabled="#{productView.currentPage eq 1}" value="Start" action="#{productView.refreshElementsPage}" actionListener="#{productView.firstPage()}" />
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (staffView.getTotalPageCount() le 1)}" disabled="#{productView.currentPage eq 1}" value="Prev" action="#{productView.refreshElementsPage}" actionListener="#{productView.prevPage()}" />
+                    </div>
+
+                    <ui:repeat id="pagination-links" value="#{staffView.getPageNumbers()}" var="page">
+                        <h:commandLink value="#{page}"
+                                       class="c-pagination__link"
+                                       action="#{staffView.refreshElementsPage}"
+                                       actionListener="#{staffView.setCurrentPage(page)}"
+                                       rendered="#{staffView.currentPage != page}"
+                        />
+                        <h:outputText class="c-pagination__current-page"
+                                      value="#{page}"
+                                      escape="false"
+                                      rendered="#{page == staffView.currentPage}"
+                        />
+                    </ui:repeat>
+
+                    <div class="c-pagination__buttons-wrapper">
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (staffView.getTotalPageCount() le 1)}" disabled="#{staffView.currentPage eq staffView.getTotalPageCount()}" value="Next" action="#{staffView.refreshElementsPage}" actionListener="#{staffView.nextPage()}" />
+                        <h:commandButton styleClass="c-pagination__button c-button" rendered="#{not (staffView.getTotalPageCount() le 11)}" disabled="#{staffView.currentPage eq staffView.getTotalPageCount()}" value="End" action="#{staffView.refreshElementsPage}" actionListener="#{staffView.lastPage()}" />
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+            <div class="c-section u-spacing-out-top-bottom--small u-flex-row">
+                <label class="">Product per page: </label>
+                <div class="u-spacing-out-left--xsmall">
+                    <h:selectOneMenu id="itemsPerPage" class="c-select" value="#{staffView.itemsPerPage}">
+                        <f:ajax render="productsTable pagination" listener="#{staffView.resetElementsPage}"/>
+
+                        <f:selectItem itemLabel="5" itemValue="#{5}"/>
+                        <f:selectItem itemLabel="10" itemValue="#{10}"/>
+                        <f:selectItem itemLabel="25" itemValue="#{25}"/>
+                        <f:selectItem itemLabel="50" itemValue="#{50}"/>
+
+                    </h:selectOneMenu>
+                </div>
+            </div>
+        </h:form>
+        <div class="c-table-legend">
+            <h:form>
+                <h:commandButton value="Create new staff"
+                                 action="#{staffView.displayCreateForm()}"
+                                 rendered="#{not staffView.createView}"
+                                 styleClass="c-button"/>
+            </h:form>
+            <h:outputText value="Total number of staff: #{staffView.allStaffSize}" />
+        </div>
+        <h:dataTable id="staffTable" value="#{staffView.staffList}" var="staff" styleClass="c-table">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{staff.staffId}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">First name</f:facet>
+                <h:outputText value="#{staff.firstName}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Last name</f:facet>
+                <h:outputText value="#{staff.lastName}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Staff details</f:facet>
+                    <h:button value="To detailed view"
+                              outcome="/protected/master_detail_pages/staffDetails.xhtml"
+                              styleClass="c-button">
+                        <f:param name="staffId" value="#{staff.staffId}" />
+                    </h:button>
+            </h:column>
+        </h:dataTable>
+    </div>
+</h:body>
+</html>

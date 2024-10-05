@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="EN">
+
+<h:head>
+    <title>Display products</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<h:body>
+    <div class="o-page-wrapper">
+        <div class="o_button-wrapper">
+            <div class="o-nav_button-wrapper">
+                <h:button value="Return to staff list " outcome="/protected/master_pages/staff.xhtml"
+                          styleClass="c-button u-spacing-out-right--xsmall"/>
+                <h:button value="Return to dashboard " outcome="/protected/dashboard.xhtml" styleClass="c-button"/>
+            </div>
+            <h:form>
+                <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button"/>
+            </h:form>
+        </div>
+        <br/>
+        <br/>
+        <h1 id="product_list">
+            <h:outputLabel value="Detail information of staff #{staffView.staff.firstName.concat(' ').concat(staffView.staff.lastName)}" />
+        </h1>
+        <br/>
+        <br/>
+        <!-- FORM FOR DETAIL VIEW -->
+        <h:form rendered="#{not staffView.updateView
+                                and not staffView.showSuccessMessage
+                                and not staffView.showDeleteMessage}">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Id:"/> <h:outputText value="#{staffView.staff.staffId}" />
+                <h:outputLabel value="Active:"/> <h:outputText value="#{staffView.staff.active.name()}" />
+                <h:outputLabel value="Email:"/> <h:outputText value="#{staffView.staff.email}" />
+                <h:outputLabel value="First name:"/> <h:outputText value="#{staffView.staff.firstName}" />
+                <h:outputLabel value="Last name:"/> <h:outputText value="#{staffView.staff.lastName}" />
+                <h:outputLabel value="Phone:"/> <h:outputText value="#{staffView.staff.phone}" />
+                <h:outputLabel value="Manager:"/> <h:outputText value="#{staffView.staff.manager.firstName
+                                                .concat(' ')
+                                                .concat(staffView.staff.manager.lastName)
+                                                .concat(' (')
+                                                .concat(staffView.staff.manager.staffId)
+                                                .concat(')')}" />
+                <h:outputLabel value="Store:"/> <h:outputText value="#{staffView.staff.store.storeName}" />
+            </h:panelGrid>
+        </h:form>
+
+        <!-- FORM FOR EDITING VIEW -->
+        <h:form rendered="#{staffView.updateView}">
+            <h:panelGrid columns="3" rendered="#{not staffView.showSuccessMessage}">
+                <h:outputLabel value="Id:"/>
+                    <h:outputText id="id" value="#{staffView.staff.staffId}"
+                                  disabled="#{staffView.updateConfirmation}" style="width: 85%"/>
+                    <h:message for="id" style="color:red" />
+                <h:outputLabel value="Active:"/>
+                    <h:selectOneMenu id="chooseState" value="#{staffView.staff.active}"
+                                     class="c-select" disabled="#{staffView.updateConfirmation}"
+                                     style="width: 90%">
+                        <h:message for="chooseState" styleClass="error-message"/>
+                        <f:selectItem itemValue="NO_STATE" itemLabel="-- Select Active State --"/>
+                        <f:selectItem itemValue="ACTIVE" itemLabel="ACTIVE"/>
+                        <f:selectItem itemValue="INACTIVE" itemLabel="INACTIVE"/>
+                        <f:ajax execute="@form" render="@form:create"/>
+                    </h:selectOneMenu>
+                    <h:message for="chooseState" style="color:red" />
+                <h:outputLabel value="Email:"/>
+                    <h:inputText id="email" value="#{staffView.staff.email}"
+                                 disabled="#{staffView.updateConfirmation}" style="width: 85%"/>
+                    <h:message for="email" style="color:red" />
+                <h:outputLabel value="First name:"/>
+                    <h:inputText id="firstName" value="#{staffView.staff.firstName}"
+                                 disabled="#{staffView.updateConfirmation}" style="width: 85%"/>
+                    <h:message for="firstName" style="color:red" />
+                <h:outputLabel value="Last name:"/>
+                    <h:inputText id="lastName" value="#{staffView.staff.lastName}"
+                                 disabled="#{staffView.updateConfirmation}" style="width: 85%"/>
+                    <h:message for="lastName" style="color:red" />
+                <h:outputLabel value="Phone:"/>
+                    <h:inputText id="phone" value="#{staffView.staff.phone}"
+                                 disabled="#{staffView.updateConfirmation}" style="width: 85%"/>
+                    <h:message for="phone" style="color:red" />
+                <h:outputLabel value="Manager:"/>
+                <h:selectOneMenu id="chooseManager" value="#{staffView.managerId}"
+                                 class="c-select" disabled="#{staffView.updateConfirmation}"
+                                 style="width: 90%">
+                    <f:selectItem itemValue="#{null}" itemLabel="-- Select Manager --"/>
+                    <f:selectItems value="#{staffView.listStaff()}" var="manager" itemValue="#{manager.staffId}"
+                                   itemLabel="#{manager.firstName.concat(' ').concat(manager.lastName)}"/>
+                    <f:ajax execute="@form" render="@form:create"/>
+                </h:selectOneMenu>
+                <h:message for="chooseManager" styleClass="error-message"/>
+                <h:outputLabel value="Store:"/>
+                <h:selectOneMenu id="chooseStore" value="#{staffView.storeId}"
+                                 class="c-select" disabled="#{staffView.updateConfirmation}"
+                                 required="true" requiredMessage="A store has to be selected!"
+                                 style="width: 90%">
+                    <f:selectItem itemValue="#{null}" itemLabel="-- Select Store --"/>
+                    <f:selectItems value="#{staffView.listStores()}" var="store" itemValue="#{store.storeId}"
+                                   itemLabel="#{store.storeName}"/>
+                    <f:ajax execute="@form" render="@form:create"/>
+                </h:selectOneMenu>
+                <h:message for="chooseStore" style="color:red" />
+            </h:panelGrid>
+            <br/>
+            <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                <h:commandButton value="Update" action="#{staffView.confirmUpdate()}"
+                                 rendered="#{not staffView.updateConfirmation
+                                            and not staffView.showSuccessMessage
+                                            and not staffView.showDeleteMessage}"
+                                 styleClass="c-button u-spacing-out-right--xsmall">
+                    <f:param name="staffId" value="#{staffView.retrieveStaffId()}"/>
+                </h:commandButton>
+                <h:commandButton value="Exit" action="#{staffView.displayUpdateForm()}"
+                                 rendered="#{not staffView.updateConfirmation
+                                            and not staffView.showSuccessMessage
+                                            and not staffView.showDeleteMessage}"
+                                 immediate="true" styleClass="c-button">
+                    <f:param name="staffId" value="#{staffView.retrieveStaffId()}" />
+                </h:commandButton>
+            </div>
+        </h:form>
+        <br/>
+        <br/>
+
+        <div class="o-nav_button-wrapper u-flex-justify-content--center">
+            <!-- BUTTONS TO TRIGGER DELETE OR UPDATE FORM -->
+            <h:form rendered="#{not staffView.updateView
+                                    and not staffView.deleteView
+                                    and not staffView.showSuccessMessage
+                                    and not staffView.showDeleteMessage}">
+                <h:commandButton value="Edit staff" action="#{staffView.displayUpdateForm()}"
+                                 styleClass="c-button u-spacing-out-right--xsmall">
+                    <f:param name="staffId" value="#{staffView.staff.staffId}" />
+                </h:commandButton>
+                <h:commandButton value="Delete" action="#{staffView.displayDeleteForm()}"
+                                 styleClass="c-button" disabled="#{not staffView.staffIsDeletable()}">
+                    <f:param name="staffId" value="#{staffView.staff.staffId}" />
+                </h:commandButton>
+            </h:form>
+
+            <!-- FORM FOR CONFIRMATION OF UPDATE OPERATION -->
+            <h:form rendered="#{staffView.updateConfirmation}">
+                <h:outputLabel value="Are you sure you want to update the staff with these information?" />
+                <br/><br/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:commandButton value="Update" action="#{staffView.updateStaff()}"
+                                     styleClass="c-button u-spacing-out-right--xsmall">
+                        <f:param name="staffId" value="#{staffView.retrieveStaffId()}" />
+                    </h:commandButton>
+                    <h:commandButton value="Exit" action="#{staffView.confirmUpdate()}"
+                                     immediate="true" styleClass="c-button">
+                        <f:param name="staffId" value="#{staffView.retrieveStaffId()}" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+
+            <!-- FORM FOR CONFIRMATION OF DELETE OPERATION -->
+            <h:form rendered="#{staffView.deleteView}">
+                <h:outputLabel value="Are you sure, you want to delete the staff from the database?
+                This is an irreversible action." styleClass="error-message"/>
+                <br/><br/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:commandButton value="Proceed" action="#{staffView.deleteStaff()}"
+                                     styleClass="c-button u-spacing-out-right--xsmall">
+                        <f:param name="staffId" value="#{staffView.staff.staffId}" />
+                    </h:commandButton>
+                    <h:commandButton value="Exit" action="#{staffView.displayDeleteForm()}"
+                                     immediate="true" styleClass="c-button">
+                        <f:param name="staffId" value="#{staffView.staff.staffId}" />
+                    </h:commandButton>
+                    <br/>
+                </div>
+            </h:form>
+
+
+            <h:form rendered="#{staffView.showSuccessMessage}">
+                <h:outputText value="#{staffView.creationStateMessage}" styleClass="success-message"/>
+                <br/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:commandButton value="Ok" action="#{staffView.displaySuccessMessage()}"
+                                     styleClass="c-button">
+                        <f:param name="staffId" value="#{staffView.staff.staffId}"/>
+                    </h:commandButton>
+                </div>
+            </h:form>
+
+            <h:form rendered="#{staffView.showDeleteMessage}">
+                <h:outputText value="#{staffView.creationStateMessage}" styleClass="success-message"/>
+                <br/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:button value="Ok" outcome="/protected/master_pages/staff.xhtml"
+                              styleClass="c-button"/>
+                </div>
+            </h:form>
+        </div>
+    </div>
+</h:body>
+</html>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Display order-items</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<h:body>
+    <div class="o-page-wrapper">
+        <f:metadata>
+            <f:viewParam name="orderId" value="#{orderDetailsView.orderIdentifier}"/>
+            <f:viewParam name="customerId" value="#{customerOrdersView.customerId}"/>
+        </f:metadata>
+        <div class="o_button-wrapper">
+            <div class="o-nav_button-wrapper">
+                <h:button value="Return to #{customerOrdersView.holdFirstAndLastName()} orders" outcome="/protected/master_detail_pages/customerOrders.xhtml" includeViewParams="false" styleClass="c-button u-spacing-out-right--xsmall">
+                    <f:param name="customerId" value="#{customerOrdersView.customerId}" />
+                </h:button>
+                <h:button value="Return to customers list " outcome="/protected/master_pages/customers.xhtml" styleClass="c-button"/>
+            </div>
+            <h:form>
+                <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button"/>
+            </h:form>
+        </div>
+        <h1>Order ##{orderDetailsView.orderIdentifier}</h1>
+        <div class="c-table-legend">
+            <h:outputText value="Customer Name: #{customerOrdersView.holdFirstAndLastName()}" />
+        </div>
+        <h:dataTable value="#{orderDetailsView.getOrderItemList()}" var="orderItem" styleClass="c-table">
+            <h:column>
+                <f:facet name="header">Product name</f:facet>
+                <h:outputText value="#{orderItem.product.productName}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header"> Price (€)</f:facet>
+                <h:outputText value="#{orderItem.product.listPrice}">
+                    <f:convertNumber type="number" maxFractionDigits="2" groupingUsed="true"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Number of units ordered</f:facet>
+                <h:outputText value="#{orderItem.quantity}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Discount </f:facet>
+                <h:outputText value="#{orderItem.discount}">
+                    <f:convertNumber type="number" groupingUsed="true"/>
+                </h:outputText>
+            </h:column>
+        </h:dataTable>
+
+        <div class="o-nav_button-wrapper u-flex-justify-content--right">
+            <h3>Sum:  #{orderDetailsView.sum()}</h3>
+        </div>
+
+    </div>
+</h:body>
+</html>

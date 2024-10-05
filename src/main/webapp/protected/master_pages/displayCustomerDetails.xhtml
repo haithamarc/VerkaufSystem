@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Display customer details</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<h:body>
+    <div class="o-page-wrapper">
+        <f:metadata>
+            <f:viewParam name="customerId" value="#{customerDetailsView.customerId}"/>
+            <f:viewAction action="#{customerDetailsView.init()}"/>
+        </f:metadata>
+        <div class="o-nav_button-wrapper">
+            <h:button value="Return to customers list " outcome="/display-pages/displayCustomers.xhtml" styleClass="c-button u-spacing-out-right--xsmall"/>
+            <h:button value="Return to dashboard " outcome="/dashboard.xhtml" styleClass="c-button"/>
+        </div>
+        <h1>Customer details</h1>
+        <h:form prependId="false" rendered="#{not customerDetailsView.activeEditForm}">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Customer ID:" />
+                <h:outputText value="#{customerDetailsView.customer.customerId}" />
+
+                <h:outputLabel value="First name:" />
+                <h:outputText value="#{customerDetailsView.customer.firstName}" />
+
+                <h:outputLabel value="Last name:" />
+                <h:outputText value="#{customerDetailsView.customer.lastName}" />
+
+                <h:outputLabel value="Phone number:" />
+                <h:outputText value="#{customerDetailsView.customer.phone}" />
+
+                <h:outputLabel value="Street:" />
+                <h:outputText value="#{customerDetailsView.customer.street}" />
+
+                <h:outputLabel value="Zip code:" />
+                <h:outputText value="#{customerDetailsView.customer.zipCode}" />
+
+                <h:outputLabel value="City:" />
+                <h:outputText value="#{customerDetailsView.customer.city}" />
+
+                <h:outputLabel value="State:" />
+                <h:outputText value="#{customerDetailsView.customer.state}" />
+            </h:panelGrid>
+            <div>
+                <h:commandButton value="Edit" rendered="#{not customerDetailsView.activeEditForm}" action="#{customerDetailsView.activeEdit()}" styleClass="c-button"/>
+            </div>
+        </h:form>
+        <h:form rendered="#{customerDetailsView.activeEditForm}">
+            <table>
+                <tr>
+                    <td>First name:</td>
+                    <td>
+                        <h:inputText id="first_name" value="#{customerDetailsView.customer.firstName}"
+                                     required="true" requiredMessage=" First name cannot be empty"/>
+                        <h:message for="first_name" styleClass="error-message"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Last name:</td>
+                    <td>
+                        <h:inputText id="last_name" value="#{customerDetailsView.customer.lastName}"
+                                     required="true" requiredMessage=" Last name cannot be empty"/>
+                        <h:message for="last_name" styleClass="error-message"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Phone number:</td>
+                    <td>
+                        <h:inputText id="phone" value="#{customerDetailsView.customer.phone}"
+                                     pattern="\(\d{3}\) \d{3}-\d{4}" label="((012) 456-7890)"/>
+                        <h:message for="phone" styleClass="error-message"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td> Street:</td>
+                    <td>
+                        <h:inputText id="street" value="#{customerDetailsView.customer.street}"
+                                     required="true" requiredMessage=" Street cannot be empty"/>
+                        <h:message for="street" styleClass="error-message"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Zip code:</td>
+                    <td>
+                        <h:inputText id="zip_code" value="#{customerDetailsView.customer.zipCode}"
+                                     validatorMessage=" Zip code must be between 10000-99999"
+                                     converterMessage="This is not a number!">
+                            <f:validateLongRange minimum="10000" maximum="99999"/>
+                        </h:inputText>
+                        <h:message for="zip_code" styleClass="error-message"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>City:</td>
+                    <td>
+                        <h:inputText id="city" value="#{customerDetailsView.customer.city}"
+                                     required="true" requiredMessage=" City cannot be empty"/>
+                        <h:message for="city" styleClass="error-message"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td> Country:</td>
+                    <td>
+                        <h:inputText id="state" value="#{customerDetailsView.customer.state}"
+                                     required="true" requiredMessage=" State cannot be empty"/>
+                        <h:message for="state" styleClass="error-message"/>
+                    </td>
+                </tr>
+            </table>
+            <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                <h:commandButton value="Update"  action="#{customerDetailsView.updateCustomer()}" styleClass="c-button u-spacing-out-right--xsmall" />
+                <h:commandButton value="Cancel"  action="#{customerDetailsView.cancel()}" styleClass="c-button" immediate="true"/>
+            </div>
+        </h:form>
+    </div>
+</h:body>
+</html>

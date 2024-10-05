@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<f:view>
+    <h:head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Team 5</title>
+    </h:head>
+    <body>
+        <div class="o-page-wrapper">
+            <h:panelGroup rendered="#{param['submit']}" styleClass="form-group row">
+                <h:outputText id="successful" value="Order is succesfully created and saved" escape="false" styleClass="success-message"/>
+            </h:panelGroup>
+            <h:panelGroup    rendered="#{createOrderView.orderStage.name.equals('ITEM_DELETED')}" styleClass="form-group row">
+                <label   />
+                <h:panelGroup  >
+                    <h:panelGroup styleClass="form-control" style="height: auto; padding-block: 2rem; display: flex; margin: 0; justify-content: center; align-items: center; background: lightgreen; border-color: darkseagreen">
+                        <h:outputText id="Itemdeleted" value="ITEM_DELETED" escape="false"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup id="stage_switch">
+                <h:panelGroup rendered="#{createOrderView.orderStage.name.equals('SELECT_CUSTOMER')}">
+                    <ui:insert name="select_customer">
+                        <ui:include src="select_customer_for_order.xhtml"/>
+                    </ui:insert>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{createOrderView.orderStage.name.equals('SELECT_PRODUCTS')}">
+                    <ui:insert name="select_products">
+                        <ui:include src="select_products_for_order.xhtml"/>
+                    </ui:insert>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{createOrderView.orderStage.name.equals('CUSTOMIZE_ORDER_ITEM')}">
+                    <ui:insert name="view_cart">
+                        <ui:include src="customize_order_item.xhtml"/>
+                    </ui:insert>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{createOrderView.orderStage.name.equals('VIEW_CART')}">
+                    <ui:insert name="view_cart">
+                        <ui:include src="shopping_cart.xhtml"/>
+                    </ui:insert>
+                </h:panelGroup>
+            </h:panelGroup>
+        </div>
+    </body>
+</f:view>
+</html>

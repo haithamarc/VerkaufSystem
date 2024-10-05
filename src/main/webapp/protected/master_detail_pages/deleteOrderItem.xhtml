@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="EN">
+<h:head>
+   <title>Update Order Items</title>
+   <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<h:body>
+   <div class="o-page-wrapper">
+      <div class="o_button-wrapper">
+         <f:metadata>
+            <f:viewParam name="orderId" value="#{orderItemsView.orderIdentifier}"/>
+            <f:viewParam name="itemId" value="#{orderItemsView.selectedOrderItemId}"/>
+            <f:viewAction action="#{orderItemsView.initOrderItem()}"/>
+         </f:metadata>
+         <div class="o_button-wrapper">
+            <h:button value="Return to orders list" outcome="/protected/master_pages/orders.xhtml" styleClass="c-button u-spacing-out-right--xsmall" />
+            <h:button value="Return to dashboard" outcome="/protected/dashboard.xhtml" styleClass="c-button" />
+         </div>
+      </div>
+      <h2>do you really want to delete Item #{orderItemsView.selectedOrderItemId} from Order #{orderItemsView.orderIdentifier} ?</h2>
+      <h:form >
+         <table>
+            <tr>
+               <td>Price (€):</td>
+               <td>
+                  <h:outputText id="inputPriced"  type = "text" value="#{orderItemsView.inputPrice}"
+                                required="true" requiredMessage=" First name cannot be empty"/>
+
+               </td>
+            </tr>
+            <tr>
+               <td>quantity:</td>
+               <td>
+                  <h:outputText id="inputAmount"   value="#{orderItemsView.inputQuantity}"  required="true" requiredMessage=" First name cannot be empty"/>
+
+               </td>
+            </tr>
+            <tr>
+               <td>Discount:</td>
+               <td>
+                  <h:outputText id="inputDiscount" type = "text" value="#{orderItemsView.inputDiscount}"   required="true" requiredMessage=" First name cannot be empty"/>
+               </td>
+            </tr>
+         </table>
+         <h:outputText styleClass="error-message" value="#{orderItemsView.errorMessage}"/>
+         <div class="o-nav_button-wrapper u-flex-justify-content--center">
+            <h:commandButton value="delete"  action="#{orderItemsView.deleteOrderItem()}" styleClass="c-button u-spacing-out-right--xsmall" />
+            <h:commandButton value="cancel"  action="#{orderItemsView.cancel()}" styleClass="c-button u-spacing-out-right--xsmall" />
+         </div>
+      </h:form>
+   </div>
+</h:body>
+</html>

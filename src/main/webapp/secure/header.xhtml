@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html   xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<f:view>
+   <h:head>
+      <meta charset="utf-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>SEP Sale-System</title>
+   </h:head>
+   <body>
+   <ui:composition>
+      <div class="c-header o-flex">
+         <div class="c-header__left-part c-header__left-part--bgc-black-lite o-flex">
+            <div class="c-button-menu o-flex--align-self-center u-spacing-out-left--xlarge u-display--block--md-sm-xs">
+               <div class="c-button-menu__horizontal-bar c-button-menu__horizontal-bar--color-red"></div>
+               <div class="c-button-menu__horizontal-bar c-button-menu__horizontal-bar--color-red"></div>
+               <div class="c-button-menu__horizontal-bar c-button-menu__horizontal-bar--color-red"></div>
+            </div>
+            <div class="c-logo c-logo--bold o-flex--align-self-center o-position--relative u-spacing-in-left--small">
+
+               <span class="c-logo__left-part-anime c-logo--size-medium o-position--relative"><span>SEP</span></span><span class="c-logo__right-part c-logo--size-normal c-logo__right-part--color-white"><span> SaleSystem</span></span>
+            </div>
+         </div>
+         <div class="c-header__right-part c-header__right-part--bgc-black o-flex o-flex--justify-content-end o-position--relative">
+            <div id="notification-icon" class="c-icon o-flex o-flex--align-self-center o-position--relative u-spacing-out-right--xxsmall">
+               <img src="resources/images/icons/notification_icon.png" class="c-icon__small-lite-img c-icon__img--color-gray c-icon__img--cursor-pointer" alt="Notification icon" />
+               <span class="c-icon__bubble c-icon__bubble--color-red c-icon__bubble-top-right o-block o-position--absolute"></span>
+            </div>
+            <div class="c-icon o-flex o-flex--align-self-center u-spacing-out-right--xxsmall">
+               <img src="resources/images/icons/help_icon.png" class="c-icon__small-img c-icon__img--color-gray c-icon__img--cursor-pointer" alt="Help icon" />
+            </div>
+            <div id="current-user-avatar" class="c-icon o-flex o-flex--align-self-center u-spacing-out-right--xlarge">
+               <img src="resources/images/icons/user_avatar_icon.jpeg" class="c-icon__medium-img c-icon__rounded-img c-icon__img--cursor-pointer" alt="Current user icon" />
+            </div>
+            <div id="header-c-block-menu" class="c-block-menu c-block-menu--bgc-white c-block-menu--position-bottom c-block-menu--medium c-block-menu--box-shadow o-flex-col o-flex--justify-content-center o-position--absolute u-hide">
+               <a href="#" class="c-block-menu__item c-block-menu__item--hover-color-red o-inline-flex o-flex--align-item-center u-spacing-in-left--small">
+                  <span>My profile</span>
+               </a>
+               <a href="#" class="c-block-menu__item c-block-menu__item--hover-color-red o-inline-flex o-flex--align-item-center u-spacing-in-left--small">
+                  <span>Edit my profile</span>
+               </a>
+               <a href="login.html" class="c-block-menu__item c-block-menu__item--hover-color-red o-inline-flex o-flex--align-item-center u-spacing-in-left--small">
+                  <span>Logout</span>
+               </a>
+            </div>
+         </div>
+      </div>
+   </ui:composition>
+   </body>
+</f:view>
+</html>
+

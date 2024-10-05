@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+   <h:head>
+      <!--<meta charset="utf-8" />-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>SEP Sale-System</title>
+   </h:head>
+   <body>
+      <ui:composition>
+         <h:panelGroup id="c-page-cover" styleClass="#{createCustomerView.showCreateForm ? '' : 'u-hide'} c-page-cover">
+         </h:panelGroup>
+         <h:form>
+            <h:panelGroup id="c-form-second" styleClass="c-form o-flex-col o-flex--centered u-spacing-out-top-bottom--large o-position--absolute #{createCustomerView.showCreateForm ? '' : 'u-hide'}">
+               <h:commandLink id="form-close-button-second" styleClass="c-icon o-flex--align-self-end"
+                              action="#{createCustomerView.hideCreateForm()}"
+                              rendered="#{not createCustomerView.showCreateMessage}">
+                  <f:ajax render="c-page-cover j_idt23:c-form-second" />
+                  <img src="resources/images/icons/close_icon.png" alt="Close icon" class="c-icon__xsmall-img c-icon__img--color-black c-icon__img--cursor-pointer c-icon__rounded-img c-icon__box-shadow-img" />
+               </h:commandLink>
+               <div class="c-icon">
+                  <img src="resources/images/icons/customer_avatar_icon.jpeg" alt="Customer avatar" class="c-icon__xlarge-img c-icon__rounded-img c-icon__box-shadow-img" />
+               </div>
+               <h:panelGroup rendered="#{not createCustomerView.showCreateMessage}">
+                  <table class="c-form__table">
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <label for="last_name" class="c-form__label c-form__label--color-black-lite">Last name:</label>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <div class="u-display-flex">
+                              <h:inputText id="last_name" value="#{createCustomerView.customer.lastName}"
+                                           styleClass="c-form__input">
+                                 <f:ajax execute="@form"  event="blur" render="@this:last_name_error"/>
+                              </h:inputText>
+                              <h:message id="last_name_error" for="last_name" styleClass="u-error-message"/>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <label for="first_name" class="c-form__label c-form__label--color-black-lite">Fist name:</label>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <div class="u-display-flex">
+                              <h:inputText id="first_name" value="#{createCustomerView.customer.firstName}"
+                                           styleClass="c-form__input">
+                                 <f:ajax execute="@form"  event="blur" render="@this:first_name_error"/>
+                              </h:inputText>
+                              <h:message id="first_name_error" for="first_name" styleClass="u-error-message"/>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <label for="postal_code" class="c-form__label c-form__label--color-black-lite">Postal code:</label>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <div class="u-display-flex">
+                              <h:inputText id="postal_code" value="#{createCustomerView.customer.zipCode}"
+                                           styleClass="c-form__input">
+                                 <f:ajax execute="@form"  event="blur" render="@this:postal_code_error"/>
+                              </h:inputText>
+                              <h:message id="postal_code_error" for="postal_code" styleClass="u-error-message"/>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <label for="state" class="c-form__label c-form__label--color-black-lite">State:</label>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <div class="u-display-flex">
+                              <h:inputText id="state" value="#{createCustomerView.customer.state}"
+                                           styleClass="c-form__input">
+                                 <f:ajax execute="@form"  event="blur" render="@this:state_error"/>
+                              </h:inputText>
+                              <h:message id="state_error" for="state" styleClass="u-error-message"/>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <label for="city" class="c-form__label c-form__label--color-black-lite">City:</label>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <div class="u-display-flex">
+                              <h:inputText id="city" value="#{createCustomerView.customer.city}"
+                                           styleClass="c-form__input">
+                                 <f:ajax execute="@form"  event="blur" render="@this:city_error"/>
+                              </h:inputText>
+                              <h:message id="city_error" for="city" styleClass="u-error-message"/>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <label for="street" class="c-form__label c-form__label--color-black-lite">Street number:</label>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <div class="u-display-flex">
+                              <h:inputText id="street" value="#{createCustomerView.customer.street}"
+                                           styleClass="c-form__input">
+                                 <f:ajax execute="@form"  event="blur" render="@this:street_error"/>
+                              </h:inputText>
+                              <h:message id="street_error" for="street" styleClass="u-error-message"/>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <label for="phone" class="c-form__label c-form__label--color-black-lite">Telefon:</label>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <div class="u-display-flex">
+                              <h:inputText id="phone"
+                                           value="#{createCustomerView.phoneNumber}" maxlength="10"
+                                           required="false" validatorMessage="Must consist of 10 digits and omit the leading 0!"
+                                           styleClass="c-form__input">
+                                 <f:validateRegex pattern="(?!0)\d{10}$|^$"/>
+                                 <f:ajax execute="@form"  event="blur" render="@this:phone_error"/>
+                              </h:inputText>
+                              <h:message id="phone_error" for="phone" styleClass="u-error-message"/>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <label for="email" class="c-form__label c-form__label--color-black-lite">E-mail:</label>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell">
+                           <div class="u-display-flex">
+                              <h:inputText id="email"
+                                           value="#{createCustomerView.customer.email}"
+                                           styleClass="c-form__input">
+                                 <f:ajax execute="@form"  event="blur" render="@this:email_error"/>
+                              </h:inputText>
+                              <h:message id="email_error" for="email" styleClass="u-error-message"/>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr class="c-form__row">
+                        <td class="c-form__cell o-flex o-flex--justify-content-center">
+                        </td>
+                     </tr>
+                  </table>
+               </h:panelGroup>
+               <h:form rendered="#{createCustomerView.showCreateMessage and createCustomerView.createStatus eq 'failed'}">
+                  <div class="u-spacing-out-top-bottom--small">
+                     <h:outputText value="#{createCustomerView.createMessage}" styleClass="u-error-message"/>
+                  </div>
+                  <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                     <h:commandLink styleClass="c-button c-small-button c-button--bg-red o-flex--align-self-center o-inline-flex o-flex--centered"
+                                    action="#{createCustomerView.hideCreateMessage()}">
+                        <f:ajax render="@form"/>
+                        <h:outputText value="Ok" />
+                     </h:commandLink>
+                  </div>
+               </h:form>
+               <h:form rendered="#{createCustomerView.showCreateMessage and createCustomerView.createStatus eq 'success'}">
+                  <div class="u-spacing-out-top-bottom--small">
+                     <h:outputText value="#{createCustomerView.createMessage}" styleClass="u-success-message"/>
+                  </div>
+                  <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                     <h:commandLink styleClass="c-button c-small-button c-button--bg-red o-flex--align-self-center o-inline-flex o-flex--centered"
+                                    action="#{createCustomerView.hideCreateMessage()}">
+                        <f:ajax render="@form"/>
+                        <h:outputText value="Ok" />
+                     </h:commandLink>
+                  </div>
+               </h:form>
+               <div class="u-display-flex">
+                  <h:commandLink id="create-customer-button" styleClass="c-button c-large-button c-button--bg-red o-flex--align-self-center o-inline-flex o-flex--centered"
+                                 action="#{createCustomerView.createCustomer()}"
+                                 rendered="#{not createCustomerView.showCreateMessage}">
+                     <f:ajax execute="@form" render="@form"/>
+                     <div class="c-icon">
+                        <img src="resources/images/icons/new_cutomer_icon.png" alt="New customer icon" class="c-icon__xsmall-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                     </div>
+                     <h:outputText value="Create customer" />
+                  </h:commandLink>
+               </div>
+            </h:panelGroup>
+         </h:form>
+         <div class="c-main o-position--relative">
+            <h:form>
+               <div id="c-main__header-id" class="c-main__header c-main__header--color-gray-lite o-flex">
+                  <div class="c-inline-menu o-flex o-flex--align-item-center u-spacing-out-left--xlarge">
+                     <div class="c-inline-menu__item o-flex">
+                        <h:commandLink class="c-inline-menu__link o-flex--align-self-center"
+                                       action="#{jsfPagesService.changePage('/secure/master_pages/customer.xhtml')}">
+                           <f:ajax render="page" />
+                           <span>Customers</span>
+                        </h:commandLink>
+                     </div>
+                  </div>
+               </div>
+            </h:form>
+            <div class="c-main__content">
+               <!-- C-CARD -->
+               <div class="c-card u-spacing-out--xlarge">
+                  <div class="c-card__header c-card__header--color-gray o-flex o-flex--justify-content-between">
+                     <div class="c-card__title c-card__title--bold o-flex o-flex--align-item-center u-spacing-out-left--medium">
+                        <div class="c-icon o-flex u-spacing-out-right--xxsmall">
+                           <img src="resources/images/icons/customer_icon.png" alt="Customer icon" class="c-icon__large-img" />
+                        </div>
+                        <span>Customer information</span>
+                     </div>
+                     <h:commandLink id="new-customer-button" styleClass="c-button c-medium-button c-button--bg-black o-flex--align-self-center o-inline-flex o-flex--centered u-spacing-out-right--medium"
+                                    action="#{createCustomerView.activeShowCreateForm()}"
+                                    onclick="#{createCustomerView.init()}">
+                        <f:ajax render="c-page-cover j_idt23:c-form-second" />
+                        <div class="c-icon o-flex">
+                           <img src="resources/images/icons/new_cutomer_icon.png" alt="new customer icon" class="c-icon__xsmall-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                        </div>
+                        <h:outputText value="New customer" />
+                     </h:commandLink>
+                  </div>
+                  <div class="c-card__content u-spacing-out-left-right--medium">
+                     <h:form class="o-layout--features-container u-spacing-out-top-bottom--large">
+                        <!-- C-ELEMENT-SEARCH-INPUT -->
+                        <div class="c-element-search-input o-layout--input-element">
+                           <h:selectOneMenu id="chooseFilter" value="#{customerView.dropdownValue}"
+                                            styleClass="c-element-search-input__label c-element-search-input__label--color-black-lite">
+                              <f:selectItem itemValue="#{null}" itemLabel="-- Select Attribute --"
+                                            itemDisabled="#{not customerView.disableFilterField()}"/>
+                              <f:selectItems id="items" value="#{customerView.filterItems}"/>
+                              <f:ajax execute="@form" render="j_idt64:inputField"/>
+                           </h:selectOneMenu>
+                           <h:inputText id="inputField" value="#{customerView.attributeValue}" styleClass="c-element-search-input__input-text o-flex--align-self-center #{customerView.disableFilterField()? 'u-cursor--not-allowed' : ''}"
+                                        disabled="#{customerView.disableFilterField()}">
+                              <f:ajax event="keyup" render="filterButton"/>
+                           </h:inputText>
+                           <!-- placeholder="Search customer by last or first name" -->
+                           <div class="c-element-search-input__buttons o-flex">
+                              <h:commandLink id="filterButton" styleClass="c-button c-xsmall-button o-flex--align-self-end o-inline-flex o-flex--centered u-spacing-out-right--xxsmall #{customerView.disableFilterButton() ? 'c-button--bg-black-disabled' : 'c-button--bg-black u-cursor--pointer'}"
+                                             action="#{customerView.refreshCustomers(true)}"
+                                             disabled="#{customerView.disableFilterButton()}">
+                                 <f:ajax render="j_idt95:customersTable"/>
+                                 <div class="c-icon o-flex">
+                                    <img src="resources/images/icons/search_icon.png" alt="Search icon" class="c-icon__xsmall-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                                 </div>
+                                 <h:outputText value="Search" />
+                              </h:commandLink>
+                              <h:commandLink styleClass="c-button c-xsmall-button c-button--bg-black o-flex--align-self-end o-inline-flex o-flex--centered"
+                                             action="#{customerView.resetFilter()}">
+                                 <f:ajax render="j_idt95:customersTable j_idt64:inputField j_idt64:chooseFilter j_idt64:filterButton"/>
+                                 <div class="c-icon o-flex">
+                                    <img src="resources/images/icons/reset_icon.png" alt="Reset icon" class="c-icon__xsmall-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                                 </div>
+                                 <h:outputText value="Reset" />
+                              </h:commandLink>
+                           </div>
+                        </div>
+                        <!-- C-PAGINATION -->
+                        <div class="c-pagination o-layout--pagination o-flex--align-item-center">
+                           <div class="c-pagination__buttons-left o-flex">
+                              <h:commandLink id="pagination-start-button" styleClass="c-button c-xsmall-button o-flex--align-self-center o-inline-flex o-flex--centered u-spacing-out-right--xxsmall #{customerView.currentPage eq 1 ?  'c-button--bg-red-disabled' : 'c-button--bg-red'}"
+                                             rendered="#{not (customerView.getTotalPageCount() le 11)}"
+                                             disabled="#{customerView.currentPage eq 1}"
+                                             action="#{customerView.refreshElementsPage}"
+                                             actionListener="#{customerView.firstPage()}">
+                                 <f:ajax  render="j_idt95:customersTable pagination-start-button pagination-prev-button pagination-next-button pagination-end-button j_idt64:paginationPanel"/>
+                                 <div class="c-icon o-flex">
+                                    <img src="resources/images/icons/start_icon.png" alt="Start icon" class="c-icon__xsmall-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                                 </div>
+                                 <h:outputText value="Start" />
+                              </h:commandLink>
+                              <h:commandLink id="pagination-prev-button" class="c-button c-xsmall-button o-flex--align-self-center o-inline-flex o-flex--centered #{customerView.currentPage eq 1 ? 'c-button--bg-red-disabled' : 'c-button--bg-red'}"
+                                             rendered="#{not (customerView.getTotalPageCount() le 1)}"
+                                             disabled="#{customerView.currentPage eq 1}"
+                                             action="#{customerView.refreshElementsPage}"
+                                             actionListener="#{customerView.prevPage()}">
+                                 <f:ajax  render="j_idt95:customersTable pagination-start-button pagination-prev-button pagination-next-button pagination-end-button j_idt64:paginationPanel"/>
+                                 <div class="c-icon o-flex">
+                                    <img src="resources/images/icons/prev_icon.png" alt="Previous icon" class="c-icon__xsmall-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                                 </div>
+                                 <h:outputText value="Prev" />
+                              </h:commandLink>
+                           </div>
+                              <h:panelGroup id="paginationPanel" styleClass="c-pagination__content o-flex o-position--relative">
+                                 <ui:repeat id="pagination-links" styleClass="c-pagination__content o-flex o-position--relative"
+                                            value="#{customerView.getPageNumbers()}" var="page">
+                                    <h:commandLink id="c-pagination__link" value="#{page}" class="c-pagination__link c-pagination__link--color-black o-inline-block"
+                                                   action="#{customerView.refreshElementsPage}"
+                                                   actionListener="#{customerView.setCurrentPage(page)}"
+                                                   rendered="#{customerView.currentPage != page}">
+                                       <f:ajax  render="j_idt95:customersTable pagination-start-button pagination-prev-button pagination-next-button pagination-end-button j_idt64:paginationPanel"/>
+                                    </h:commandLink>
+                                    <h:outputText id="c-pagination__current-page" class="c-pagination__current-page c-pagination__current-page--color-white c-pagination__current-page--bgc-red c-pagination__current-page--bold" value="#{page}" escape="false"
+                                                  rendered="#{page == customerView.currentPage}"
+                                    />
+                                 </ui:repeat>
+                              </h:panelGroup>
+                           <div class="c-pagination__buttons-right o-flex">
+                              <h:commandLink id="pagination-next-button" class="c-button c-xsmall-button c-button--bg-red o-flex--align-self-center o-inline-flex o-flex--centered u-spacing-out-right--xxsmall #{customerView.currentPage eq customerView.getTotalPageCount() ?  'c-button--bg-red-disabled' : 'c-button--bg-red'}"
+                                             rendered="#{not (customerView.getTotalPageCount() le 1)}"
+                                             disabled="#{customerView.currentPage eq customerView.getTotalPageCount()}"
+                                             action="#{customerView.refreshElementsPage}"
+                                             actionListener="#{customerView.nextPage()}">
+                                 <f:ajax  render="j_idt95:customersTable pagination-start-button pagination-prev-button pagination-next-button pagination-end-button j_idt64:paginationPanel"/>
+                                 <div class="c-icon o-flex">
+                                    <img src="resources/images/icons/next_icon.png" alt="Next icon" class="c-icon__xsmall-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                                 </div>
+                                 <h:outputText value="Next" />
+                              </h:commandLink>
+                              <h:commandLink id="pagination-end-button" class="c-button c-xsmall-button c-button--bg-red o-flex--align-self-center o-inline-flex o-flex--centered #{customerView.currentPage eq customerView.getTotalPageCount() ?  'c-button--bg-red-disabled' : 'c-button--bg-red'}"
+                                             rendered="#{not (customerView.getTotalPageCount() le 11)}"
+                                             disabled="#{customerView.currentPage eq customerView.getTotalPageCount()}"
+                                             action="#{customerView.refreshElementsPage}"
+                                             actionListener="#{customerView.lastPage()}">
+                                 <f:ajax  render="j_idt95:customersTable pagination-start-button pagination-prev-button pagination-next-button pagination-end-button j_idt64:paginationPanel"/>
+                                 <div class="c-icon o-flex">
+                                    <img src="resources/images/icons/end_icon.png" alt="End icon" class="c-icon__xsmall-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                                 </div>
+                                 <h:outputText value="End" />
+                              </h:commandLink>
+                           </div>
+                        </div>
+                        <!-- C-ELEMENT-DROPDOWN -->
+                        <div class="c-element-dropdown o-layout--input-element u-display--grid-xl-lg">
+                           <label for="itemsPerPage" class="c-element-dropdown__label c-element-dropdown__label--color-black-lite">Customers per page</label>
+                           <h:selectOneMenu id="itemsPerPage" class="c-element-dropdown__dropdown o-flex--align-self-center"
+                                            value="#{customerView.itemsPerPage}">
+                              <f:selectItem itemLabel="5" itemValue="#{5}"/>
+                              <f:selectItem itemLabel="10" itemValue="#{10}"/>
+                              <f:selectItem itemLabel="25" itemValue="#{25}"/>
+                              <f:selectItem itemLabel="50" itemValue="#{50}"/>
+                           </h:selectOneMenu>
+                           <div class="c-element-dropdown__button o-flex">
+                              <h:commandLink class="c-button c-xsmall-button c-button--bg-black o-flex--align-self-end o-inline-flex o-flex--centered">
+                                 <f:ajax execute="itemsPerPage" render="j_idt95:customersTable pagination pagination-start-button pagination-prev-button pagination-next-button pagination-end-button j_idt64:paginationPanel"
+                                         listener="#{customerView.resetElementsPage}"/>
+                                 <div class="c-icon o-flex">
+                                    <img src="resources/images/icons/apply_icon.png" alt="Apply icon" class="c-icon__xsmall-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                                 </div>
+                                 <h:outputText value="Apply" />
+                              </h:commandLink>
+                           </div>
+                        </div>
+                        <div class="c-element-dropdown o-layout--input-element u-display--grid-xs">
+                           <label for="customer-per-page2" class="c-element-dropdown__label c-element-dropdown__label--color-black-lite">Select page</label>
+                           <select id="customer-per-page2" class="c-element-dropdown__dropdown o-flex--align-self-center">
+                              <option>1</option>
+                              <option>2</option>
+                              <option>3</option>
+                              <option>4</option>
+                              <option>5</option>
+                              <option>6</option>
+                              <option>7</option>
+                              <option>8</option>
+                              <option>9</option>
+                              <option>10</option>
+                           </select>
+                           <div class="c-element-dropdown__button o-flex">
+                              <button class="c-button c-xsmall-button c-button--bg-black o-flex--align-self-end o-inline-flex o-flex--centered">
+                                 <div class="c-icon o-flex">
+                                    <img src="resources/images/icons/apply_icon.png" alt="Apply icon" class="c-icon__xsmall-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                                 </div>
+                                 <span>Apply</span>
+                              </button>
+                           </div>
+                        </div>
+                     </h:form>
+                     <!-- C-TABLE -->
+                     <h:form>
+                        <div class="c-table">
+                           <div class="c-table__number-array-elements c-table__number-array-elements--bold o-flex o-flex--justify-content-end">
+                              <h:outputText value="#{customerView.refreshSize()} Customers"/>
+                           </div>
+                           <h:dataTable id="customersTable" value="#{customerView.filteredCustomers}"
+                                        styleClass="c-table__table c-table__table--color-black-lite u-spacing-out-bottom--large u-spacing-out-top--medium"
+                                        var="customer">
+                              <h:column>
+                                 <f:facet name="header">Id</f:facet>
+                                 <h:outputText value="#{customer.customerId}"/>
+                              </h:column>
+                              <h:column>
+                                 <f:facet name="header">First name</f:facet>
+                                 <h:outputText value="#{customer.firstName}"/>
+                              </h:column>
+                              <h:column>
+                                 <f:facet name="header">Last name</f:facet>
+                                 <h:outputText value="#{customer.lastName}"/>
+                              </h:column>
+                              <h:column styleClass="u-display-flex u-display-flex--justify-center">
+                                 <h:commandLink styleClass="c-button c-large-button c-button--bg-gray o-flex--align-self-center o-inline-flex o-flex--centered"
+                                                action="#{jsfPagesService.changePage('/secure/master_detail_pages/customerDetails.xhtml')}">
+                                    <f:ajax render="page" listener="#{customerDetailsView.init(customer.customerId)}" />
+                                    <f:ajax render="page"  listener="#{customerOrdersView.init(customer.customerId)}"/>
+                                    <div class="c-icon o-flex o-flex--align-self-center o-position--relative u-spacing-out-right--xxsmall">
+                                       <img src="resources/images/icons/open_icon.png" alt="Open icon" class="c-icon__xsmall-img" />
+                                    </div>
+                                    <h:outputText value="customer details" />
+                                    <f:param name="customerId" value="#{customer.customerId}" />
+                                 </h:commandLink>
+                              </h:column>
+                           </h:dataTable>
+                        </div>
+                     </h:form>
+                  </div>
+               </div>
+               <!-- C-EXTERN-BRAND -->
+               <div class="c-extern-brand c-extern-brand--color-gray-lite o-flex-col u-xsmall-text u-spacing-out-right--xlarge u-display--flex-xl-lg">
+                  <span class="o-flex--align-self-end">Powered by Team-05.</span>
+               </div>
+            </div>
+         </div>
+      </ui:composition>
+   </body>
+</f:view>
+</html>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <h:outputStylesheet library="css" name="style.css"/>
+    <title>Display stores</title>
+</h:head>
+<h:body>
+    <div class="o-page-wrapper">
+        <div class="o_button-wrapper">
+            <div class="o-nav_button-wrapper">
+                <h:button value="Back to dashboard" outcome="/protected/dashboard" styleClass="c-button"/>
+            </div>
+            <h:form>
+                <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button"/>
+            </h:form>
+        </div>
+        <h1 id="stores_list">Stores list</h1>
+        <h:form styleClass="c-filter">
+            <div class="c-filter__title">Filters</div>
+            <h:selectOneMenu id="chooseFilter" value="#{storeView.dropdownValue}" class="c-select">
+                <f:selectItem itemValue="#{null}" itemLabel="-- Select Attribute --"
+                              itemDisabled="#{not storeView.disableFilterField()}"/>
+                <f:selectItems id="items" value="#{storeView.filterItems}"/>
+                <f:ajax execute="@form" render="@form:inputField"/>
+            </h:selectOneMenu>
+            <h:inputText id="inputField" value="#{storeView.attributeValue}" styleClass="u-spacing-out-left--xsmall"
+                         disabled="#{storeView.disableFilterField()}">
+                <f:ajax event="keyup" render="filter"/>
+            </h:inputText>
+            <h:outputText styleClass="error-message" value="#{storeView.errorMessage}"/>
+            <div class="c-filter__button-wrapper">
+                <h:commandButton id="filter" value="Filter" action="#{storeView.refreshStores(true)}"
+                                 styleClass="c-button" disabled="#{storeView.disableFilterButton()}"/>
+                <h:commandButton value="Reset" action="#{storeView.resetFilter()}"
+                                 styleClass="c-button u-spacing-out-left--xsmall"/>
+            </div>
+        </h:form>
+        <h:form>
+            <h:panelGroup style="margin: 1rem" class="form-group c-pagination" id="pagination">
+                <h:panelGroup class="c-pagination__wrapper"
+                              rendered="#{not (storeView.getTotalPageCount() eq 1)}">
+                    <div class="c-pagination__buttons-wrapper">
+                        <h:commandButton styleClass="c-pagination__button c-button"
+                                         rendered="#{not (storeView.getTotalPageCount() le 11)}"
+                                         disabled="#{storeView.currentPage eq 1}" value="Start"
+                                         action="#{storeView.refreshElementsPage}"
+                                         actionListener="#{storeView.firstPage()}"
+                        />
+                        <h:commandButton styleClass="c-pagination__button c-button"
+                                         rendered="#{not (storeView.getTotalPageCount() le 1)}"
+                                         disabled="#{storeView.currentPage eq 1}" value="Prev"
+                                         action="#{storeView.refreshElementsPage}"
+                                         actionListener="#{storeView.prevPage()}"
+                        />
+                    </div>
+                    <ui:repeat id="pagination-links" value="#{storeView.getPageNumbers()}" var="page">
+                        <h:commandLink value="#{page}" class="c-pagination__link"
+                                       action="#{storeView.refreshElementsPage}"
+                                       actionListener="#{storeView.setCurrentPage(page)}"
+                                       rendered="#{storeView.currentPage != page}"
+                        />
+                        <h:outputText class="c-pagination__current-page" value="#{page}" escape="false"
+                                      rendered="#{page == storeView.currentPage}"
+                        />
+                    </ui:repeat>
+                    <div class="c-pagination__buttons-wrapper">
+                        <h:commandButton styleClass="c-pagination__button c-button"
+                                         rendered="#{not (storeView.getTotalPageCount() le 1)}"
+                                         disabled="#{storeView.currentPage eq storeView.getTotalPageCount()}"
+                                         value="Next" action="#{storeView.refreshElementsPage}"
+                                         actionListener="#{storeView.nextPage()}"
+                        />
+                        <h:commandButton styleClass="c-pagination__button c-button"
+                                         rendered="#{not (storeView.getTotalPageCount() le 11)}"
+                                         disabled="#{storeView.currentPage eq storeView.getTotalPageCount()}"
+                                         value="End" action="#{storeView.refreshElementsPage}"
+                                         actionListener="#{storeView.lastPage()}"
+                        />
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+            <div class="c-section u-spacing-out-top-bottom--small u-flex-row">
+                <label class="">Stores per page: </label>
+                <div class="u-spacing-out-left--xsmall">
+                    <h:selectOneMenu id="itemsPerPage" class="c-select" value="#{storeView.itemsPerPage}">
+                        <f:ajax render="storesTable pagination" listener="#{storeView.resetElementsPage}"/>
+                        <f:selectItem itemLabel="5" itemValue="#{5}"/>
+                        <f:selectItem itemLabel="10" itemValue="#{10}"/>
+                        <f:selectItem itemLabel="25" itemValue="#{25}"/>
+                        <f:selectItem itemLabel="50" itemValue="#{50}"/>
+                    </h:selectOneMenu>
+                </div>
+            </div>
+        </h:form>
+        <div class="c-table-legend">
+            <h:outputText value="Total number of stores: #{storeView.refreshSize()}"/>
+        </div>
+        <h:dataTable id="storesTable" value="#{storeView.storesList}" styleClass="c-table" var="store">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{store.storeId}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Store name</f:facet>
+                <h:outputText value="#{store.storeName}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Store details</f:facet>
+                <h:button value="More info" styleClass="c-button" outcome="/protected/master_detail_pages/storeDetails.xhtml?id=#{store.storeId}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Staffs</f:facet>
+                <h:button value="More info" styleClass="c-button" outcome="/protected/master_pages/storeStaffs.xhtml?id=#{store.storeId}"/>
+            </h:column>
+        </h:dataTable>
+
+    </div>
+</h:body>
+</html>

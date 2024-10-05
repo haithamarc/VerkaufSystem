@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="EN">
+
+<h:head>
+    <title>Display products</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<h:body>
+    <div class="o-page-wrapper">
+        <div class="o_button-wrapper">
+            <div class="o-nav_button-wrapper">
+                <h:button value="Return to products list " outcome="/protected/master_pages/products.xhtml"
+                          styleClass="c-button u-spacing-out-right--xsmall"/>
+                <h:button value="Return to dashboard " outcome="/protected/dashboard.xhtml" styleClass="c-button"/>
+            </div>
+            <h:form>
+                <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button"/>
+            </h:form>
+        </div>
+        <br/>
+        <br/>
+        <h1 id="product_list">
+            <h:outputLabel value="Detail information of product #{productView.product.productName}" />
+        </h1>
+        <br/>
+        <br/>
+        <!-- FORM FOR DETAIL VIEW OF A PRODUCT -->
+        <h:form rendered="#{not productView.updateView
+                                    and not productView.showSuccessMessage
+                                    and not productView.showDeleteMessage}">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Id:"/> <h:outputText value="#{productView.product.productId}" />
+                <h:outputLabel value="List price:"/> <h:outputText value="#{productView.product.listPrice}" />
+                <h:outputLabel value="Model-Year:"/> <h:outputText value="#{productView.product.modelYear}" />
+                <h:outputLabel value="Product name:"/> <h:outputText value="#{productView.product.productName}" />
+                <h:outputLabel value="Brand:"/> <h:outputText value="#{productView.product.brand.brandName}" />
+                <h:outputLabel value="Category:"/> <h:outputText value="#{productView.product.category.categoryName}" />
+            </h:panelGrid>
+        </h:form>
+
+        <!-- FORM FOR EDITING VIEW -->
+        <h:form rendered="#{productView.updateView}">
+            <h:panelGrid columns="3" rendered="#{not productView.showSuccessMessage}">
+                <h:outputLabel id="id" value="Id:"/>
+                    <h:outputText value="#{productView.product.productId}"
+                                  disabled="#{productView.updateConfirmation}" style="width: 85%"/>
+                    <h:message for="id" style="color:red" />
+                <h:outputLabel value="List price:"/>
+                    <h:inputText id="listPrice" value="#{productView.product.listPrice}"
+                                 disabled="#{productView.updateConfirmation}" style="width: 85%"/>
+                    <h:message for="listPrice" style="color:red" />
+                <h:outputLabel value="Model-Year:"/>
+                    <h:inputText id="modelYear" value="#{productView.product.modelYear}"
+                                 disabled="#{productView.updateConfirmation}" style="width: 85%"/>
+                    <h:message for="modelYear" style="color:red" />
+                <h:outputLabel value="Product name:"/>
+                    <h:inputText id="name" value="#{productView.product.productName}"
+                                 disabled="#{productView.updateConfirmation}" style="width: 85%"/>
+                    <h:message for="name" style="color:red" />
+                <h:outputLabel value="Brand:"/>
+                    <h:selectOneMenu id="chooseBrandCreate" value="#{productView.brandId}"
+                                     class="c-select" disabled="#{productView.updateConfirmation}"
+                                     required="true" requiredMessage="Brand field must not be empty!"
+                                     style="width: 90%">
+                        <f:selectItem itemValue="#{null}" itemLabel="-- Select Brand --"/>
+                        <f:selectItems value="#{productView.listBrands()}" var="brand" itemValue="#{brand.brandId}"
+                                       itemLabel="#{brand.brandName}"/>
+                        <f:ajax execute="@form" render="@form:update"/>
+                    </h:selectOneMenu>
+                    <h:message for="chooseBrandCreate" style="color:red" />
+                <h:outputLabel value="Category:" />
+                    <h:selectOneMenu id="chooseCategoryCreate" value="#{productView.categoryId}"
+                                     class="c-select" disabled="#{productView.updateConfirmation}"
+                                     required="true" requiredMessage="Category field must not be empty!"
+                                     style="width: 90%">
+                        <f:selectItem itemValue="#{null}" itemLabel="-- Select Category --"/>
+                        <f:selectItems value="#{productView.listCategories()}" var="category" itemValue="#{category.categoryId}"
+                                       itemLabel="#{category.categoryName}"/>
+                        <f:ajax execute="@form" render="@form:update"/>
+                    </h:selectOneMenu>
+                    <h:message for="chooseCategoryCreate" style="color:red" />
+            </h:panelGrid>
+            <br/>
+            <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                <h:commandButton value="Update" action="#{productView.confirmUpdate()}"
+                                 rendered="#{not productView.updateConfirmation
+                                    and not productView.showSuccessMessage
+                                    and not productView.showDeleteMessage}"
+                                 styleClass="c-button u-spacing-out-right--xsmall">
+                    <f:param name="productId" value="#{productView.retrieveProductId()}" />
+                </h:commandButton>
+                <h:commandButton value="Exit" action="#{productView.displayUpdateForm()}"
+                                 rendered="#{not productView.updateConfirmation
+                                    and not productView.showSuccessMessage
+                                    and not productView.showDeleteMessage}"
+                                 immediate="true" styleClass="c-button">
+                    <f:param name="productId" value="#{productView.retrieveProductId()}" />
+                </h:commandButton>
+            </div>
+        </h:form>
+        <br/>
+        <br/>
+
+        <div class="o-nav_button-wrapper u-flex-justify-content--center">
+            <!-- BUTTONS TO TRIGGER DELETE OR UPDATE FORM -->
+            <h:form rendered="#{not productView.updateView
+                                    and not productView.deleteView
+                                    and not productView.showSuccessMessage
+                                    and not productView.showDeleteMessage}">
+                <h:commandButton value="Edit product" action="#{productView.displayUpdateForm()}"
+                                 styleClass="c-button u-spacing-out-right--xsmall">
+                    <f:param name="productId" value="#{productView.product.productId}" />
+                </h:commandButton>
+                <h:commandButton value="Delete" action="#{productView.displayDeleteForm()}"
+                                 styleClass="c-button" disabled="#{not productView.productIsDeletable()}">
+                    <f:param name="productId" value="#{productView.product.productId}" />
+                </h:commandButton>
+            </h:form>
+
+            <!-- FORM FOR CONFIRMATION OF UPDATE OPERATION -->
+            <h:form rendered="#{productView.updateConfirmation}">
+                <h:outputLabel value="Are you sure you want to update the product with these information?" />
+                <br/><br/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:commandButton value="Update" action="#{productView.updateProduct()}"
+                                     styleClass="c-button u-spacing-out-right--xsmall">
+                        <f:param name="productId" value="#{productView.retrieveProductId() }" />
+                    </h:commandButton>
+                    <h:commandButton value="Exit" action="#{productView.confirmUpdate()}"
+                                     immediate="true" styleClass="c-button">
+                        <f:param name="productId" value="#{productView.retrieveProductId()}" />
+                    </h:commandButton>
+                    <br/>
+                </div>
+            </h:form>
+
+            <!-- FORM FOR CONFIRMATION OF DELETE OPERATION -->
+            <h:form rendered="#{productView.deleteView}">
+                <h:outputLabel value="Are you sure, you want to delete the product from the database?
+                This is an irreversible action." styleClass="error-message"/>
+                <br/><br/>
+                <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                    <h:commandButton value="Proceed" action="#{productView.deleteProduct()}"
+                                     styleClass="c-button u-spacing-out-right--xsmall">
+                        <f:param name="productId" value="#{productView.product.productId}" />
+                    </h:commandButton>
+                    <h:commandButton value="Exit" action="#{productView.displayDeleteForm()}"
+                                     immediate="true" styleClass="c-button">
+                        <f:param name="productId" value="#{productView.product.productId}" />
+                    </h:commandButton>
+                    <br/>
+                </div>
+            </h:form>
+        </div>
+        <br/>
+
+        <h:form rendered="#{productView.showSuccessMessage}">
+            <h:outputText value="#{productView.creationStateMessage}" styleClass="success-message"/>
+            <br/>
+            <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                <h:commandButton value="Ok" action="#{productView.displaySuccessMessage()}"
+                    styleClass="c-button">
+                    <f:param name="productId" value="#{productView.product.productId}"/>
+                </h:commandButton>
+            </div>
+        </h:form>
+
+        <h:form rendered="#{productView.showDeleteMessage}">
+            <h:outputText value="#{productView.creationStateMessage}" styleClass="success-message"/>
+            <br/>
+            <div class="o-nav_button-wrapper u-flex-justify-content--center">
+                <h:button value="Ok" outcome="/protected/master_pages/products.xhtml"
+                                 styleClass="c-button"/>
+            </div>
+        </h:form>
+    </div>
+</h:body>
+</html>

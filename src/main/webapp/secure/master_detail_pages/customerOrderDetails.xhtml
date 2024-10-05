@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <h:head>
+        <!--<meta charset="utf-8" />-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>SEP Sale-System</title>
+    </h:head>
+    <body>
+    <ui:composition>
+        <div class="c-main o-position--relative">
+            <h:form>
+                <div id="c-main__header-id" class="c-main__header c-main__header--color-gray-lite o-flex">
+                    <div class="c-inline-menu o-flex o-flex--align-item-center u-spacing-out-left--xlarge">
+                        <div class="c-inline-menu__item o-flex u-spacing-out-right--xxsmall o-flex">
+                            <h:commandLink class="c-inline-menu__link o-flex--align-self-center"
+                                           action="#{jsfPagesService.changePage('/secure/master_pages/customer.xhtml')}">
+                                <f:ajax render="page" />
+                                <span>Customers</span>
+                            </h:commandLink>
+                        </div>
+                        <div class="c-inline-menu__icon c-icon o-flex u-spacing-out-right--xxsmall">
+                            <img src="resources/images/icons/arrow_right_icon.png" alt="Arrow right icon" class="c-icon__xxsmall-img c-icon__img--color-gray o-flex--align-self-center" />
+                        </div>
+                        <div class="c-inline-menu__item o-flex u-spacing-out-right--xxsmall">
+                            <h:commandLink class="c-inline-menu__link o-flex--align-self-center"
+                                           action="#{jsfPagesService.changePage('/secure/master_detail_pages/customerDetails.xhtml')}">
+                                <f:param name="customerId" value="#{customerDetailsView.customer.customerId}" />
+                                <f:ajax render="page" listener="#{customerDetailsView.init(customerDetailsView.customer.customerId)}" />
+                                <f:ajax render="page"  listener="#{customerOrdersView.init(customerDetailsView.customer.customerId)}"/>
+                                <span>Customer (#{customerDetailsView.customer.lastName} #{customerDetailsView.customer.firstName}) details</span>
+                            </h:commandLink>
+                        </div>
+                        <div class="c-inline-menu__icon c-icon o-flex u-spacing-out-right--xxsmall">
+                            <img src="resources/images/icons/arrow_right_icon.png" alt="Arrow right icon" class="c-icon__xxsmall-img c-icon__img--color-gray o-flex--align-self-center" />
+                        </div>
+                        <div class="c-inline-menu__item c-inline-menu__item--active o-flex">
+                            <h:commandLink class="c-inline-menu__link o-flex--align-self-center"
+                                           action="#{jsfPagesService.changePage('/secure/master_pages/customer.xhtml')}">
+                                <f:ajax render="page" />
+                                <span>Sales order (#{orderDetailsView.orderId}) details</span>
+                            </h:commandLink>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+            <div class="c-main__content">
+                <!-- C-CARD -->
+                <div class="c-card u-spacing-out--xlarge">
+                    <div class="c-card__header c-card__header--color-gray o-flex o-flex--justify-content-between">
+                        <div class="c-card__title c-card__title--bold o-flex o-flex--align-item-center u-spacing-out-left--medium">
+                            <div class="c-icon o-flex u-spacing-out-right--xxsmall">
+                                <img src="resources/images/icons/customer_icon.png" alt="Customer icon" class="c-icon__large-img" />
+                            </div>
+                            <span>Customer Order details</span>
+                        </div>
+                    </div>
+                    <div class="c-card__content u-spacing-out-left-right--medium">
+                        <div class="c-infos-widget o-flex o-flex--justify-content-around u-spacing-out-top-bottom--large">
+                            <div class="c-infos-widget__item c-infos-widget__item--bgc-black-lite o-position--relative">
+                                <div class="c-infos-widget__main-icon c-infos-widget__main-icon--bgc-red o-position--absolute o-flex o-flex--centered">
+                                    <div class="c-icon">
+                                        <img src="resources/images/icons/euro_icon.png" alt="Euro icon" class="c-icon__large-img c-icon__img--color-white " />
+                                    </div>
+                                </div>
+                                <div class="c-infos-widget__header o-flex-col o-flex-justify-content-center o-flex--align-item-end">
+                                    <span>Total price</span>
+                                    <span class="c-infos-widget__main-text c-infos-widget__main-text--color-red">#{orderDetailsView.sum()}</span>
+                                </div>
+                                <hr class="c-infos-widget__horizontal-bar" />
+                                <div class="c-infos-widget__content o-flex o-flex--align-item-center">
+                                    <div class="c-icon o-flex o-flex--align-item-center">
+                                        <img src="resources/images/icons/store_icon.png" alt="Store icon" class="c-icon__small-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                                    </div>
+                                    <span class="u-spacing-out-right--xxsmall">Store: </span><span><a href="store.html" class="u-text--undeline">#{orderDetailsView.order.store.storeName}</a></span>
+                                </div>
+                            </div>
+                            <div class="c-infos-widget__item c-infos-widget__item--bgc-black-lite o-position--relative">
+                                <div class="c-infos-widget__main-icon c-infos-widget__main-icon--bgc-red o-position--absolute o-flex o-flex--centered">
+                                    <div class="c-icon">
+                                        <img src="resources/images/icons/valid_icon.png" alt="Valid icon" class="c-icon__large-img c-icon__img--color-white " />
+                                    </div>
+                                </div>
+                                <div class="c-infos-widget__header o-flex-col o-flex-justify-content-center o-flex--align-item-end">
+                                    <span>Order status</span>
+                                    <span class="c-infos-widget__main-text-1 c-infos-widget__main-text--color-red">#{orderDetailsView.order.orderStatus}</span>
+                                </div>
+                                <hr class="c-infos-widget__horizontal-bar" />
+                                <div class="c-infos-widget__content o-flex o-flex--align-item-center">
+                                    <div class="c-icon o-flex o-flex--align-item-center">
+                                        <img src="resources/images/icons/calendar_icon.png" alt="Calendar icon" class="c-icon__small-img c-icon__img--color-white u-spacing-out-right--xxsmall" />
+                                    </div>
+                                    <span class="u-spacing-out-right--xxsmall">Shipping date: #{orderDetailsView.order.orderDate} </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- C-TABLE -->
+                        <h:form>
+                            <div class="c-table">
+                                <h:dataTable id="customersTable" value="#{orderDetailsView.getOrderItemList()}"
+                                             styleClass="c-table__table c-table__table--color-black-lite u-spacing-out-bottom--large u-spacing-out-top--medium"
+                                             var="orderItem">
+                                    <h:column>
+                                        <f:facet name="header">Product name</f:facet>
+                                        <h:outputText value="#{orderItem.product.productName}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header"> Price (€)</f:facet>
+                                        <h:outputText value="#{orderItem.product.listPrice}">
+                                            <f:convertNumber type="number" maxFractionDigits="2" groupingUsed="true"/>
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Number of units ordered</f:facet>
+                                        <h:outputText value="#{orderItem.quantity}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Discount </f:facet>
+                                        <h:outputText value="#{orderItem.discount}">
+                                            <f:convertNumber type="number" groupingUsed="true"/>
+                                        </h:outputText>
+                                    </h:column>
+                                </h:dataTable>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+                <!-- C-EXTERN-BRAND -->
+                <div class="c-extern-brand c-extern-brand--color-gray-lite o-flex-col u-xsmall-text u-spacing-out-right--xlarge u-display--flex-xl-lg">
+                    <span class="o-flex--align-self-end">Powered by Team-05.</span>
+                </div>
+            </div>
+        </div>
+    </ui:composition>
+    </body>
+</f:view>
+</html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <h:outputStylesheet library="css" name="style.css"/>
+    <title>Display stores details</title>
+</h:head>
+<h:body>
+    <f:metadata>
+        <f:viewAction action="#{storeDetailsView.init(param['id'])}"/>
+    </f:metadata>
+    <div class="o-page-wrapper">
+        <div class="o_button-wrapper">
+            <div class="o-nav_button-wrapper">
+                <h:button value="Back to Stores list" outcome="/protected/master_pages/stores.xhtml" styleClass="c-button u-spacing-out-right--xsmall"/>
+                <h:button value="Back to Dashboard" outcome="/protected/dashboard.xhtml" styleClass="c-button"/>
+            </div>
+            <h:form>
+                <h:commandButton value="Logout" action="#{authentication.invalidate()}" styleClass="c-button"/>
+            </h:form>
+        </div>
+        <h1 id="stores_details">#{storeDetailsView.store.storeName} store</h1>
+        <h2>Details</h2>
+        <h:form>
+            <h:panelGroup>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Store Id: "/>
+                    <h:outputText value="#{storeDetailsView.store.storeId}"/>
+
+                    <h:outputLabel value="Store name: "/>
+                    <h:outputText value="#{storeDetailsView.store.storeName}"/>
+
+                    <h:outputLabel value="E-mail: "/>
+                    <h:outputText value="#{storeDetailsView.store.email}"/>
+
+                    <h:outputLabel value="Phone number: "/>
+                    <h:outputText value="#{storeDetailsView.store.phone}"/>
+
+                    <h:outputLabel value="Street: "/>
+                    <h:outputText value="#{storeDetailsView.store.street}"/>
+
+                    <h:outputLabel value="Zip code: "/>
+                    <h:outputText value="#{storeDetailsView.store.zipCode}"/>
+
+                    <h:outputLabel value="City: "/>
+                    <h:outputText value="#{storeDetailsView.store.city}"/>
+
+                    <h:outputLabel value="State: "/>
+                    <h:outputText value="#{storeDetailsView.store.state}"/>
+
+                </h:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </div>
+</h:body>
+</html>
